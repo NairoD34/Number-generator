@@ -62,18 +62,29 @@ class UtilisateurController extends AbstractController
                 return true;
             }
         }
-        $this->render('user.php', []);
+        $this->render('registration.php', []);
     }
 
     // cette function permet de traiter des datas user et des les intégrer à la BDD
-    public function createUtilisateur($datas)
+    private function createUtilisateur($datas)
     {
         Model::getInstance()->save('utilisateur', $datas);
     }
 
 
 
-    private function displayconnectUtilisateur()
+    public function displayConnectUtilisateur()
     {
+    }
+
+    private function verifyConnect()
+    {
+
+        if (empty(Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']))) {
+            $error = "Nom d'utilisateur ou mot de passe éronné";
+            return $error;
+        }
+        if ($_POST['password']) {
+        }
     }
 }
