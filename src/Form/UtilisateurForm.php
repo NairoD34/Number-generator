@@ -20,7 +20,7 @@ class UtilisateurForm
         return $form;
     }
 
-    public static function formConnect($action, $user)
+    public static function formConnect($action)
     {
         $form = "<form action = '$action' method='POST'>
                 <input id='id' name='id' value='' style='display:none'>
