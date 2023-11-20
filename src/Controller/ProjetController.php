@@ -20,6 +20,7 @@ class ProjetController extends AbstractController
         if (isset($_POST['submit'])) {
             $datas = [
                 'nom_projet' => $_POST['nom_projet'],
+                $_SESSION,
                 // passer par session et pour attribuer le projet a la session qui en crée un
                 'id_utilisateur'=> 1,   
 

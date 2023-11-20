@@ -1,3 +1,8 @@
+
+<?php
+
+?>
+
 <a href="index.php?controller=ProjetController&method=createProjet"> Ajouter un projet : </a><br>
 <br>
 

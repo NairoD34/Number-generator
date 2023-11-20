@@ -85,7 +85,6 @@ class UtilisateurController extends AbstractController
             $index->index();
             echo 'Vous êtes connecté';
             return true;
-            return true;
         }
         $this->render('connection.php', []);
     }
