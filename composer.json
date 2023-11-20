@@ -1,0 +1,10 @@
+{
+    "name": "vendor/jdl",
+    "description": "Tarpin projet",
+    "autoload": {
+        "psr-4": {
+            "Vendor\\Jdl\\": "src/"
+        }
+    },
+    "require": {}
+}
