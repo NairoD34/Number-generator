@@ -3,11 +3,12 @@
 namespace vendor\jdl\Controller;
 
 use vendor\jdl\App\AbstractController;
+use vendor\jdl\App\Dispatcher;
 use vendor\jdl\App\Model;
-use vendor\jdl\Entity\Utilisateur;
-use vendor\jdl\Form\CreationUtilisateurForm;
+// use vendor\jdl\Entity\Utilisateur;
+// use vendor\jdl\Form\CreationUtilisateurForm;
 use vendor\jdl\App\Verifier;
-use vendor\jdl\Form\UtilisateurForm;
+//use vendor\jdl\Form\UtilisateurForm;
 
 class UtilisateurController extends AbstractController
 {
@@ -46,9 +47,7 @@ class UtilisateurController extends AbstractController
         }
     }
 
-
     // cette fonction nous permet d'afficher le formulaire d'enregistrement et de le traiter
-
     public function displayCreateUtilisateur()
     {
         if (isset($_POST['submit']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['verif'])) {
@@ -58,7 +57,7 @@ class UtilisateurController extends AbstractController
 
             ];
             if ($this->verifRegister($datas)) {
-
+                var_dump($datas);
                 $this->createUtilisateur($datas);
                 $index = new IndexController();
                 $index->index();
@@ -75,6 +74,16 @@ class UtilisateurController extends AbstractController
         Model::getInstance()->save('utilisateur', $datas);
     }
 
+    /**
+     * Méthode qui détruit toutes les variables de la session en cours puis redirige sur la page d'accueil.
+     */
+    public function disconnect()
+    {
+        if (Dispatcher::is_connected()) {
+            session_unset();     
+        }
+        Dispatcher::redirect();
+    }
 
 
     public function displayConnectUtilisateur()

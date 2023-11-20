@@ -48,7 +48,7 @@ class Dispatcher
     /**
      * Redirige sur la page indiquée
      */
-    public static function redirect($controllerName,$method)
+    public static function redirect($controllerName="", $method="")
     {
         header('location: '.self::generateUrl($controllerName,$method));
     }
@@ -58,7 +58,7 @@ class Dispatcher
      */
     public static function is_connected()
     {
-        if (isset($_SESSION['connected'])) {
+        if (isset($_SESSION['username'])) {
             return true;
         }
         return false;
