@@ -9,6 +9,10 @@ use vendor\jdl\Form\CreationUtilisateurForm;
 
 class UtilisateurController extends AbstractController
 {
+    public function createUtilisateur($data)
+    {
+        Model::getInstance()->save('utilisateur', $data);
+    }
   public function index()
   {
     // if isset submit then submitUtilisateur
