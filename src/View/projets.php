@@ -10,6 +10,7 @@ else {
     echo 'toto';
 }
 
+// ajouter pour voir ses projets lié a son propres id si on est admin
 
 foreach ($projets as $value){
     echo '<ul><li><a href="index.php?controller=ProjetController&method=displayProjets&id='
