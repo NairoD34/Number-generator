@@ -8,9 +8,10 @@ use vendor\jdl\Form\ProjetForm;
 
 class ProjetController extends AbstractController
 {
-    public function displayProjet()
+    public function displayProjets()
     {
         // echo 'coucou';
+        // pas connecté -> redirect index
         $result = Model::getInstance()->readAll('projet');
         $this->render('projets.php', ['projets'=> $result]);
     }
@@ -28,7 +29,7 @@ class ProjetController extends AbstractController
 
             Model::getInstance()->save('projet' , $datas);
 
-            $this->displayProjet();
+            $this->displayProjets();
         } else {
             $this->render('projet.php', ['form' => ProjetForm::formProjet('?controller=ProjetController&method=createProjet')]);
         }
