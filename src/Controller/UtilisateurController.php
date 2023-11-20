@@ -75,6 +75,15 @@ class UtilisateurController extends AbstractController
 
     public function displayConnectUtilisateur()
     {
+        if ($this->verifyConnect()) {
+            $_SESSION['username'] = $_POST['username'];
+            $index = new IndexController();
+            $index->index();
+            echo 'Vous êtes connecté';
+            return true;
+            return true;
+        }
+        $this->render('connection.php', []);
     }
 
     private function verifyConnect()
@@ -82,10 +91,9 @@ class UtilisateurController extends AbstractController
         $user = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']);
         $error = false;
         if (isset($_POST['submit'])) {
-            if ($user !== false) {
-                if (password_verify($_POST['password'],)) {
-                    $_SESSION['connected'] = 'connecté';
-                    $_SESSION['username'] = $_POST['username'];
+            if (!empty($user)) {
+                if (password_verify($_POST['password'], $user->getMdp())) {
+
                     return true;
                 } else {
                     $error = 'identifiants non reconnu';
