@@ -6,7 +6,7 @@ class Config
 {
     const DBNAME = "Jardiland";
     const DBHOST = 'localhost';
-    const DBUSER = 'jardi';
+    const DBUSER = 'jardiiiiiiiiiiiiiiiiiii';
     const DBPWD = 'jardiland';
     const ENTITY = 'vendor\jdl\Entity\\';
     const CONTROLLER = 'vendor\jdl\Controller\\';
