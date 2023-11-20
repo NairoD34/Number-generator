@@ -14,6 +14,7 @@ class AbstractController
 
     public function render($view, $vars)
     {
+        // Si y'a pas de titre dans le tableau, on en met un par défaut
         if (empty($vars["title"])) {
             $vars["title"] = "Tarpin Projet Manager";
         }

@@ -42,6 +42,7 @@ class UtilisateurController extends AbstractController
         }
     }
 
+
     // cette fonction nous permet d'afficher le formulaire d'enregistrement et de le traiter
 
     public function displayCreateUtilisateur()
@@ -63,6 +64,7 @@ class UtilisateurController extends AbstractController
         }
         $this->render('user.php', []);
     }
+
     // cette function permet de traiter des datas user et des les intégrer à la BDD
     public function createUtilisateur($datas)
     {
@@ -70,7 +72,8 @@ class UtilisateurController extends AbstractController
     }
 
 
+
     private function displayconnectUtilisateur()
-    {
-    }
+    
+    
 }
