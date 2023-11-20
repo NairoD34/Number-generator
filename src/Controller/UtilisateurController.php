@@ -79,12 +79,21 @@ class UtilisateurController extends AbstractController
 
     private function verifyConnect()
     {
-        $username = $_POST['username'];
-        if (empty(Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']))) {
-            $error = "Nom d'utilisateur ou mot de passe éronné";
-            return $error;
+        $user = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']);
+        $error = false;
+        if (isset($_POST['submit'])) {
+            if ($user !== false) {
+                if (password_verify($_POST['password'],)) {
+                    $_SESSION['connected'] = 'connecté';
+                    $_SESSION['username'] = $_POST['username'];
+                    return true;
+                } else {
+                    $error = 'identifiants non reconnu';
+                }
+            } else {
+                $error = 'Identifiants non reconnu';
+            }
         }
-        if ($_POST['password']) {
-        }
+        return $error;
     }
 }
