@@ -50,7 +50,7 @@ class UtilisateurController extends AbstractController
             }
         } else {
             $vars = [
-                'form' => UtilisateurForm::form('?controller=UtilisateurController&method=displayCreateUser')
+                'form' => UtilisateurForm::formSubscribe('?controller=UtilisateurController&method=displayCreateUser')
             ];
         }
         $this->render('user.php', []);
@@ -59,14 +59,13 @@ class UtilisateurController extends AbstractController
     {
         Model::getInstance()->save('utilisateur', $datas);
     }
-  public function index()
-  {
-    // if isset submit then submitUtilisateur
-    $this->render("index.php", []);
-  }
+    public function index()
+    {
+        // if isset submit then submitUtilisateur
+        $this->render("index.php", []);
+    }
 
-  private function submitUtilisateur()
-  {
-
-  }
+    private function submitUtilisateur()
+    {
+    }
 }
