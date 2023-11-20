@@ -3,7 +3,7 @@
     "description": "Tarpin projet",
     "autoload": {
         "psr-4": {
-            "Vendor\\Jdl\\": "src/"
+            "vendor\\jdl\\": "src/"
         }
     },
     "require": {}
