@@ -9,4 +9,14 @@ use vendor\jdl\Form\CreationUtilisateurForm;
 
 class UtilisateurController extends AbstractController
 {
+  public function index()
+  {
+    // if isset submit then submitUtilisateur
+    $this->render("index.php", []);
+  }
+
+  private function submitUtilisateur()
+  {
+
+  }
 }
