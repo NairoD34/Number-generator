@@ -12,9 +12,9 @@ class UtilisateurForm
                 <label for='username'>Nom d'utilisateur</label>
                 <input id='username' type='text' name='username'>
                 <label for='password'>Votre Mot de Passe</label>
-                <input id='password' type='text' name='password'>
+                <input id='password' type='password' name='password'>
                 <label for='verif'>Vérifier votre Mot de Passe</label>
-                <input id='verif' type='text' name='verif'>
+                <input id='verif' type='password' name='verif'>
                 <button name='submit' value='submit'>submit</button>
             </form>";
         return $form;
@@ -27,7 +27,7 @@ class UtilisateurForm
                 <label for='username'>Nom d'utilisateur</label>
                 <input id='username' type='text' name='username' value =''>
                 <label for='password'>Mot de passe</label>
-                <input id='password' type='text' name='password' value =''>
+                <input id='password' type='password' name='password' value =''>
                 
                 <button name='submit' value='submit'>submit</button>
             </form>";

@@ -13,11 +13,17 @@ class UtilisateurController extends AbstractController
 {
     private function verifRegister($datas)
     {
+        $datas = [
+            'username' => $_POST['username'],
+            'password' => $_POST['password'],
+            'verif' => $_POST['verif'],
+
+        ];
         $errors = [];
         if ($datas == '') {
             $errors[] = 'Un ou plusieurs champs sont vides';
         }
-        if (!Verifier::validateWord($datas, '_@!#0-9-')) {
+        if (!Verifier::validateWord($datas['username'], '_@!#0-9-') && !Verifier::validateWord($datas['password'], '_@!#0-9-')) {
             $errors[] = 'Vous utilisez des caractères interdits';
         }
         if ($_POST['password'] !== $_POST['verif']) {
@@ -27,7 +33,7 @@ class UtilisateurController extends AbstractController
             $errors[] = "Nom d'utilisateur déjà utilisé";
         }
         if ($errors != []) {
-            $errors;
+            var_dump($errors);
             return false;
         } else {
             return true;
@@ -37,16 +43,15 @@ class UtilisateurController extends AbstractController
     {
         if (isset($_POST['submit']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['verif'])) {
             $datas = [
-                $_POST['username'],
-                $_POST['password'],
-                $_POST['verif'],
+                'nom_utilisateur' => $_POST['username'],
+                'mdp' => password_hash($_POST['password'], PASSWORD_DEFAULT)
 
             ];
             if ($this->verifRegister($datas)) {
 
                 $this->createUtilisateur($datas);
                 $index = new IndexController();
-                $index->index('le livre a bien ete modifie');
+                $index->index('Utilisateur créé');
             }
         } else {
             $vars = [
