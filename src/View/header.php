@@ -8,6 +8,8 @@ use vendor\jdl\App\Dispatcher;
             <li><a href="index.php">Accueil</a></li>
             <li><a href="<?php echo Dispatcher::generateUrl("UtilisateurController", "displayCreateUtilisateur"); ?>">S'enregistrer</a></li>
             <li><a href="<?php echo Dispatcher::generateUrl("UtilisateurController", "displayConnectUtilisateur"); ?>">Se connecter</a></li>
+            <li><a href="<?php echo Dispatcher::generateUrl("ProjetController", "displayProjet"); ?>"> Projets : </a></li>
+
         </ul>
     </nav>
 </header>
