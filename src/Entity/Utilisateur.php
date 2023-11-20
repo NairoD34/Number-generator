@@ -4,66 +4,68 @@ namespace vendor\jdl\Entity;
 
 class Utilisateur
 {
-    private int $id;
-    private ?string $username;
-    private ?string $password;
+    private int $id_utilisateur;
+    private ?string $nom_utilisateur;
+    private ?string $mdp;
+
+
 
     /**
-     * Get the value of id
+     * Get the value of id_utilisateur
      */
-    public function getId()
+    public function getId_utilisateur()
     {
-        return $this->id;
+        return $this->id_utilisateur;
     }
 
     /**
-     * Set the value of id
+     * Set the value of id_utilisateur
      *
      * @return  self
      */
-    public function setId($id)
+    public function setId_utilisateur($id_utilisateur)
     {
-        $this->id = $id;
+        $this->id_utilisateur = $id_utilisateur;
 
         return $this;
     }
 
     /**
-     * Get the value of username
+     * Get the value of nom_utilisateur
      */
-    public function getUsername()
+    public function getNom_utilisateur()
     {
-        return $this->username;
+        return $this->nom_utilisateur;
     }
 
     /**
-     * Set the value of username
+     * Set the value of nom_utilisateur
      *
      * @return  self
      */
-    public function setUsername($username)
+    public function setNom_utilisateur($nom_utilisateur)
     {
-        $this->username = $username;
+        $this->nom_utilisateur = $nom_utilisateur;
 
         return $this;
     }
 
     /**
-     * Get the value of password
+     * Get the value of mdp
      */
-    public function getPassword()
+    public function getMdp()
     {
-        return $this->password;
+        return $this->mdp;
     }
 
     /**
-     * Set the value of password
+     * Set the value of mdp
      *
      * @return  self
      */
-    public function setPassword($password)
+    public function setMdp($mdp)
     {
-        $this->password = $password;
+        $this->mdp = $mdp;
 
         return $this;
     }

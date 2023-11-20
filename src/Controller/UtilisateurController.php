@@ -36,10 +36,10 @@ class UtilisateurController extends AbstractController
         }
         if ($errors != []) {
             $str = "<pre>";
-            foreach($errors as $error) {
-                $str .= $error."<br>";
+            foreach ($errors as $error) {
+                $str .= $error . "<br>";
             }
-            echo $str."</pre>";
+            echo $str . "</pre>";
             return false;
         } else {
             return true;
@@ -92,11 +92,13 @@ class UtilisateurController extends AbstractController
 
     private function verifyConnect()
     {
-        $user = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']);
         $error = false;
         if (isset($_POST['submit'])) {
+            $user = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']);
+            var_dump($user);
+
             if (!empty($user)) {
-                if (password_verify($_POST['password'], $user->getMdp())) {
+                if (password_verify($_POST['password'], $user[0]->getMdp())) {
 
                     return true;
                 } else {
