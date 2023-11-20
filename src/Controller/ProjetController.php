@@ -8,11 +8,11 @@ use vendor\jdl\Form\ProjetForm;
 
 class ProjetController extends AbstractController
 {
-    public function displayProjet()
+    public function displayProjets()
     {
         // echo 'coucou';
         $result = Model::getInstance()->readAll('projet');
-        $this->render('projets.php', ['projets'=> $result]);
+        $this->render('projets.php', ['projets' => $result]);
     }
 
     public function createProjet()
@@ -21,13 +21,13 @@ class ProjetController extends AbstractController
             $datas = [
                 'nom_projet' => $_POST['nom_projet'],
                 // passer par session et pour attribuer le projet a la session qui en crée un
-                'id_utilisateur'=> 1,   
+                'id_utilisateur' => 1,
 
             ];
 
-            Model::getInstance()->save('projet' , $datas);
+            Model::getInstance()->save('projet', $datas);
 
-            $this->displayProjet();
+            $this->displayProjets();
         } else {
             $this->render('projet.php', ['form' => ProjetForm::formProjet('?controller=ProjetController&method=createProjet')]);
         }

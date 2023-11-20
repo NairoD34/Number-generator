@@ -1,8 +1,5 @@
-<?php 
-use vendor\jdl\Form\ProjetForm;
-use vendor\jdl\App\Dispatcher;
+<?php
 
-echo "<h1>Ajoutez un projet</h1>";
-echo ProjetForm::formProjet(Dispatcher::generateUrl("ProjetController", "createProjet"));
-
-
+foreach ($taches as $tache) {
+    echo "<li><a href=http://localhost/phpobjet/mvc/?controller=TacheController&method=displayTache&id=" . $tache->getId_tache() .  ">" . $tache->getTitre_tache() . "</a></li>";
+}
