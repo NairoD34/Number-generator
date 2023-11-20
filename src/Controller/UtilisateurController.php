@@ -37,10 +37,10 @@ class UtilisateurController extends AbstractController
         }
         if ($errors != []) {
             $str = "<pre>";
-            foreach($errors as $error) {
-                $str .= $error."<br>";
+            foreach ($errors as $error) {
+                $str .= $error . "<br>";
             }
-            echo $str."</pre>";
+            echo $str . "</pre>";
             return false;
         } else {
             return true;
@@ -71,7 +71,7 @@ class UtilisateurController extends AbstractController
     }
 
     // cette function permet de traiter des datas user et des les intégrer à la BDD
-    public function createUtilisateur($datas)
+    private function createUtilisateur($datas)
     {
         Model::getInstance()->save('utilisateur', $datas);
     }
@@ -85,7 +85,37 @@ class UtilisateurController extends AbstractController
     }
 
 
-    private function displayconnectUtilisateur()
+    public function displayConnectUtilisateur()
     {
+        if ($this->verifyConnect()) {
+            $_SESSION['username'] = $_POST['username'];
+            $index = new IndexController();
+            $index->index();
+            echo 'Vous êtes connecté';
+            return true;
+            return true;
+        }
+        $this->render('connection.php', []);
+    }
+
+    private function verifyConnect()
+    {
+        $error = false;
+        if (isset($_POST['submit'])) {
+            $user = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']);
+            var_dump($user);
+
+            if (!empty($user)) {
+                if (password_verify($_POST['password'], $user[0]->getMdp())) {
+
+                    return true;
+                } else {
+                    $error = 'identifiants non reconnu';
+                }
+            } else {
+                $error = 'Identifiants non reconnu';
+            }
+        }
+        return $error;
     }
 }

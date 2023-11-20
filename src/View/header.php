@@ -6,12 +6,14 @@ use vendor\jdl\App\Dispatcher;
     <nav>
         <ul>
             <li><a href="index.php">Accueil</a></li>
-            <?php if (Dispatcher::is_connected()) : ?>
+            <?php if (!Dispatcher::is_connected()) : ?>
             <li><a href="<?php echo Dispatcher::generateUrl("UtilisateurController", "displayCreateUtilisateur"); ?>">S'enregistrer</a></li>
             <li><a href="<?php echo Dispatcher::generateUrl("UtilisateurController", "displayConnectUtilisateur"); ?>">Se connecter</a></li>
             <?php else : ?>
+            <li><a href="<?php echo Dispatcher::generateUrl("ProjetController", "displayProjet"); ?>"> Projets : </a></li>
             <li><a href="<?php echo Dispatcher::generateUrl("UtilisateurController", "disconnect"); ?>">Se déconnecter</a></li>
             <?php endif; ?>
+            
         </ul>
     </nav>
 </header>

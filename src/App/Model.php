@@ -32,7 +32,7 @@ class Model extends PDO
 
     public function readAll($entity)
     {
-        $query = $this->query('select * from ' . $entity);
+        $query = $this->query(' select * from ' . $entity);
         return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . $entity);
     }
 
