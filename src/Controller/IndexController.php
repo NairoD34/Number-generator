@@ -10,6 +10,6 @@ class IndexController extends AbstractController
 
     public function index()
     {
-        self::render('index.php', []);
+        $this->render('index.php', []);
     }
 }

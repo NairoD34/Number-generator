@@ -37,4 +37,18 @@ final class Verifier
     }
     return false;
   }
+
+  /**
+   * Checks if the string $wordcontains a set of forbidden characters using regex
+   * @param string $word : The word/sentence/name to validate
+   * @param string $forbiddenChars : A string containing the invalid characters (ex: "_ -")
+   * @return bool : true if the $word contains invalid characters
+   */
+  public static function hasForbiddenChars(string $word, string $forbiddenChars):bool
+  {
+    if (preg_match_all("/^[^" . $forbiddenChars . "]*$/mu", $word)) {
+      return false;
+    }
+    return true;
+  }
 }

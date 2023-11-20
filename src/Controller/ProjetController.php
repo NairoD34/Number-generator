@@ -11,6 +11,7 @@ class ProjetController extends AbstractController
     public function displayProjet()
     {
         // echo 'coucou';
+        // N'afficher que les projet de l'utilisateurice
         $result = Model::getInstance()->readAll('projet');
         $this->render('projets.php', ['projets'=> $result]);
     }

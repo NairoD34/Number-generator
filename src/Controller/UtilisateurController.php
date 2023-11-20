@@ -14,25 +14,27 @@ class UtilisateurController extends AbstractController
 {
     // Cette fonction sert à vérifier les datas rentré dans le form register 
     // Elle permet de savoir si le mdp et le vérif correspondent, si les champs ne sont pas vides et si le username n'existe pas déjà
-    private function verifRegister($datas)
+    private function verifRegister()
     {
         $datas = [
             'username' => $_POST['username'],
             'password' => $_POST['password'],
             'verif' => $_POST['verif'],
-
         ];
         $errors = [];
         if ($datas == '') {
             $errors[] = 'Un ou plusieurs champs sont vides';
         }
-        if (!Verifier::validateWord($datas['username'], '_@!#0-9-') && !Verifier::validateWord($datas['password'], '_@!#0-9-')) {
-            $errors[] = 'Vous utilisez des caractères interdits';
+        if (!Verifier::validateWord($datas['username'], '_@!#0-9-')) {
+            $errors[] = 'Vous utilisez des caractères interdits sur votre nom de compte';
         }
-        if ($_POST['password'] !== $_POST['verif']) {
+        if (Verifier::hasForbiddenChars($datas['password'], '<>"\'')) {
+            $errors[] = 'Votre mot de passe ne peut pas contenir les caractères suivants : <>"\'';
+        }
+        if ($datas['password'] !== $datas['verif']) {
             $errors[] = 'Vos mots de passe ne correspondent pas';
         }
-        if (!empty(Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']))) {
+        if (!empty(Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $datas['username']))) {
             $errors[] = "Nom d'utilisateur déjà utilisé";
         }
         if ($errors != []) {
@@ -56,8 +58,7 @@ class UtilisateurController extends AbstractController
                 'mdp' => password_hash($_POST['password'], PASSWORD_DEFAULT)
 
             ];
-            if ($this->verifRegister($datas)) {
-                var_dump($datas);
+            if ($this->verifRegister()) {
                 $this->createUtilisateur($datas);
                 $index = new IndexController();
                 $index->index();
@@ -106,8 +107,6 @@ class UtilisateurController extends AbstractController
         $error = false;
         if (isset($_POST['submit'])) {
             $user = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']);
-            var_dump($user);
-
             if (!empty($user)) {
                 if (password_verify($_POST['password'], $user[0]->getMdp())) {
                     $_SESSION['id'] = $user[0]->getId_Utilisateur();
