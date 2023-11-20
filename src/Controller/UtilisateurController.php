@@ -62,7 +62,7 @@ class UtilisateurController extends AbstractController
                 return true;
             }
         }
-        $this->render('user.php', []);
+        $this->render('registration.php', []);
     }
 
     // cette function permet de traiter des datas user et des les intégrer à la BDD
