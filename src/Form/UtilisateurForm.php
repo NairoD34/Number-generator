@@ -6,7 +6,7 @@ use vendor\jdl\App\Model;
 
 class UtilisateurForm
 {
-    public static function form($action)
+    public static function formSubscribe($action)
     {
         $form = "<form action = '$action' method='POST'>
                 <label for='username'>Nom d'utilisateur</label>

@@ -59,4 +59,14 @@ class UtilisateurController extends AbstractController
     {
         Model::getInstance()->save('utilisateur', $datas);
     }
+  public function index()
+  {
+    // if isset submit then submitUtilisateur
+    $this->render("index.php", []);
+  }
+
+  private function submitUtilisateur()
+  {
+
+  }
 }
