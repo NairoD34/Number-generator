@@ -35,7 +35,11 @@ class UtilisateurController extends AbstractController
             $errors[] = "Nom d'utilisateur déjà utilisé";
         }
         if ($errors != []) {
-            var_dump($errors);
+            $str = "<pre>";
+            foreach($errors as $error) {
+                $str .= $error."<br>";
+            }
+            echo $str."</pre>";
             return false;
         } else {
             return true;
