@@ -3,6 +3,7 @@
 namespace vendor\jdl\Controller;
 
 use vendor\jdl\App\AbstractController;
+use vendor\jdl\App\Dispatcher;
 use vendor\jdl\App\Model;
 use vendor\jdl\Entity\Utilisateur;
 use vendor\jdl\Form\CreationUtilisateurForm;
@@ -75,6 +76,13 @@ class UtilisateurController extends AbstractController
         Model::getInstance()->save('utilisateur', $datas);
     }
 
+    public function disconnect()
+    {
+        if (Dispatcher::is_connected()) {
+            session_abort();
+            Dispatcher::redirect();
+        }
+    }
 
 
     private function displayconnectUtilisateur()
