@@ -5,6 +5,7 @@ namespace vendor\jdl\Controller;
 use vendor\jdl\App\AbstractController;
 use vendor\jdl\App\Model;
 use vendor\jdl\Form\ProjetForm;
+use vendor\jdl\Controller\TacheController;
 
 class ProjetController extends AbstractController
 {
@@ -31,5 +32,11 @@ class ProjetController extends AbstractController
         } else {
             $this->render('projet.php', ['form' => ProjetForm::formProjet('?controller=ProjetController&method=createProjet')]);
         }
+    }
+    public function displayProjet()
+    {
+        $result = Model::getInstance()->getById('projet', $_GET['id']);
+        $results = Model::getInstance()->readAll('tache');
+        $this->render('projet.php', ['taches' => $results, 'projet' => $result]);
     }
 }

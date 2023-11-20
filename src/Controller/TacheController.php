@@ -7,9 +7,7 @@ use vendor\jdl\App\AbstractController;
 
 class TacheController extends AbstractController
 {
-    private function displayTaches()
+    public function displayTaches()
     {
-        $results = Model::getInstance()->readAll('tache');
-        $this->render('projet.php', ['taches' => $results]);
     }
 }

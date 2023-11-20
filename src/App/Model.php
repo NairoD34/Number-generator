@@ -38,7 +38,7 @@ class Model extends PDO
 
     public function getById($entity, $id)
     {
-        $query = $this->query('select * from ' . $entity . ' where id=' . $id);
+        $query = $this->query('select * from ' . $entity . ' where id_' . $entity . '=' . $id);
         return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . $entity)[0];
     }
 

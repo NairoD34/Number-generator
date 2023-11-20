@@ -1,5 +1,10 @@
 <?php
 
+use vendor\jdl\App\Dispatcher;
+
+echo "Nom du projet : " . $projet->getNom_projet() . "<br>";
+
+
 foreach ($taches as $tache) {
-    echo "<li><a href=http://localhost/phpobjet/mvc/?controller=TacheController&method=displayTache&id=" . $tache->getId_tache() .  ">" . $tache->getTitre_tache() . "</a></li>";
+    echo '<li><a href=' . Dispatcher::generateUrl("UtilisateurController", "displayCreateUtilisateur") . '>' . $tache->getTitre_tache() . '</a></li>';
 }
