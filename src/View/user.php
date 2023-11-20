@@ -1,4 +1,6 @@
 <?php
 
-// Formulaire de connection
+use vendor\jdl\Form\UtilisateurForm;
+
+echo UtilisateurForm::formSubscribe("index.php?controller=UtilisateurController&method=displayCreateUtilisateur");
 
