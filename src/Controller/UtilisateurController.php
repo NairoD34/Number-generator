@@ -79,7 +79,7 @@ class UtilisateurController extends AbstractController
 
     private function verifyConnect()
     {
-
+        $username = $_POST['username'];
         if (empty(Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']))) {
             $error = "Nom d'utilisateur ou mot de passe éronné";
             return $error;
