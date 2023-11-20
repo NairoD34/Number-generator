@@ -74,6 +74,6 @@ class UtilisateurController extends AbstractController
 
 
     private function displayconnectUtilisateur()
-    
-    
+    {
+    }
 }
