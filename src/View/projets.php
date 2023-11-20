@@ -1,5 +1,3 @@
-<a href="index.php"> Retour sur l'index </a><br>
-<br>
 <a href="index.php?controller=ProjetController&method=createProjet"> Ajouter un projet : </a><br>
 <br>
 
