@@ -79,12 +79,15 @@ class UtilisateurController extends AbstractController
 
     public function displayConnectUtilisateur()
     {
-        if ($this->verifyConnect()) {
-            $_SESSION['username'] = $_POST['username'];
-            $index = new IndexController();
-            $index->index();
-            echo 'Vous êtes connecté';
-            return true;
+        if (isset($_POST['submit'])) {
+            if ($this->verifyConnect()) {
+
+                $index = new IndexController();
+                $index->index();
+                echo 'Vous êtes connecté';
+                var_dump($_SESSION);
+                return true;
+            }
         }
         $this->render('connection.php', []);
     }
@@ -98,7 +101,9 @@ class UtilisateurController extends AbstractController
 
             if (!empty($user)) {
                 if (password_verify($_POST['password'], $user[0]->getMdp())) {
-
+                    $_SESSION['id'] = $user[0]->getId_Utilisateur();
+                    $_SESSION['username'] = $_POST['username'];
+                    $_SESSION['connected'] = 'connecté';
                     return true;
                 } else {
                     $error = 'identifiants non reconnu';
