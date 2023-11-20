@@ -7,6 +7,7 @@ use vendor\jdl\App\Model;
 use vendor\jdl\Entity\Utilisateur;
 use vendor\jdl\Form\CreationUtilisateurForm;
 use vendor\jdl\App\Verifier;
+use vendor\jdl\Form\UtilisateurForm;
 
 class UtilisateurController extends AbstractController
 {
@@ -44,7 +45,13 @@ class UtilisateurController extends AbstractController
             if ($this->verifRegister($datas)) {
 
                 $this->createUtilisateur($datas);
+                $index = new IndexController();
+                $index->index('le livre a bien ete modifie');
             }
+        } else {
+            $vars = [
+                'form' => UtilisateurForm::form('?controller=UtilisateurController&method=displayCreateUser')
+            ];
         }
         $this->render('user.php', []);
     }
