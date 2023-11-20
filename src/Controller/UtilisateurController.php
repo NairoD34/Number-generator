@@ -39,6 +39,7 @@ class UtilisateurController extends AbstractController
             return true;
         }
     }
+
     public function displayCreateUtilisateur()
     {
         if (isset($_POST['submit']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['verif'])) {
@@ -60,10 +61,12 @@ class UtilisateurController extends AbstractController
         }
         $this->render('user.php', []);
     }
+
     public function createUtilisateur($datas)
     {
         Model::getInstance()->save('utilisateur', $datas);
     }
+    
     public function index()
     {
         // if isset submit then submitUtilisateur
