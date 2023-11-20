@@ -11,6 +11,8 @@ use vendor\jdl\Form\UtilisateurForm;
 
 class UtilisateurController extends AbstractController
 {
+    // Cette fonction sert à vérifier les datas rentré dans le form register 
+    // Elle permet de savoir si le mdp et le vérif correspondent, si les champs ne sont pas vides et si le username n'existe pas déjà
     private function verifRegister($datas)
     {
         $datas = [
@@ -39,6 +41,9 @@ class UtilisateurController extends AbstractController
             return true;
         }
     }
+
+    // cette fonction nous permet d'afficher le formulaire d'enregistrement et de le traiter
+
     public function displayCreateUtilisateur()
     {
         if (isset($_POST['submit']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['verif'])) {
@@ -51,26 +56,21 @@ class UtilisateurController extends AbstractController
 
                 $this->createUtilisateur($datas);
                 $index = new IndexController();
-                $index->index('Utilisateur créé');
+                $index->index();
+                echo 'Votre compte à bien été créé';
+                return true;
             }
-        } else {
-            $vars = [
-                'form' => UtilisateurForm::formSubscribe('?controller=UtilisateurController&method=displayCreateUser')
-            ];
         }
         $this->render('user.php', []);
     }
+    // cette function permet de traiter des datas user et des les intégrer à la BDD
     public function createUtilisateur($datas)
     {
         Model::getInstance()->save('utilisateur', $datas);
     }
-    public function index()
-    {
-        // if isset submit then submitUtilisateur
-        $this->render("index.php", []);
-    }
 
-    private function submitUtilisateur()
+
+    private function displayconnectUtilisateur()
     {
     }
 }
