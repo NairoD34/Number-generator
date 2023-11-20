@@ -51,7 +51,6 @@ class UtilisateurController extends AbstractController
     public function displayCreateUtilisateur()
     {
         if (isset($_POST['submit']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['verif'])) {
-            echo "totoo";
             $datas = [
                 'nom_utilisateur' => $_POST['username'],
                 'mdp' => password_hash($_POST['password'], PASSWORD_DEFAULT)
