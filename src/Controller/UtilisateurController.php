@@ -88,15 +88,12 @@ class UtilisateurController extends AbstractController
 
     public function displayConnectUtilisateur()
     {
-        if (isset($_POST['submit'])) {
-            if ($this->verifyConnect()) {
-
-                $index = new IndexController();
-                $index->index();
-                echo 'Vous êtes connecté';
-                var_dump($_SESSION);
-                return true;
-            }
+        if ($this->verifyConnect()) {
+            $_SESSION['username'] = $_POST['username'];
+            $index = new IndexController();
+            $index->index();
+            echo 'Vous êtes connecté';
+            return true;
         }
         $this->render('connection.php', []);
     }
