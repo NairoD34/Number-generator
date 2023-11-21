@@ -22,12 +22,6 @@ class ProjetController extends AbstractController
         // pas connecté -> redirect index
     }
 
-    public function displayProjetUtilisateur()
-    {
-        $result = Model::getInstance()->getById('projet', $_GET['id']);
-        $this->render('projets.php', ['projets' => $result]);
-    }
-
     public function createProjet()
     {
         if (!Dispatcher::is_connected()) {
