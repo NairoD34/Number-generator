@@ -23,5 +23,13 @@ class Projet
     {
         return $this->nom_projet;
     }
+
+    /**
+     * Get the value of id_utilisateur
+     */ 
+    public function getId_utilisateur()
+    {
+        return $this->id_utilisateur;
+    }
 }
 
