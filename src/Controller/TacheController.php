@@ -5,13 +5,14 @@ namespace vendor\jdl\Controller;
 use vendor\jdl\App\Model;
 use vendor\jdl\App\AbstractController;
 use vendor\jdl\App\Dispatcher;
+use vendor\jdl\App\Security;
 use vendor\jdl\Form\TacheForm;
 
 class TacheController extends AbstractController
 {
     public function displayTache()
     {
-        if (!Dispatcher::is_connected()) {
+        if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
 
@@ -23,7 +24,7 @@ class TacheController extends AbstractController
     }
     public function createTache()
     {
-        if (!Dispatcher::is_connected()) {
+        if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
 
@@ -36,12 +37,11 @@ class TacheController extends AbstractController
                 'id_projet' => $_GET['id_projet']
                 // passer par session et pour attribuer le projet a la session qui en crée un
                 // 'id_utilisateur'=> 1,   
-
             ];
 
             Model::getInstance()->save('projet', $datas);
 
-            $this->displayProjets();
+            //$this->displayProjets(); Méthode qui existe pas ???
         } else {
             $this->render('createprojet.php', ['form' => TacheForm::formNewTache('?controller=ProjetController&method=createProjet')]);
         }

@@ -1,11 +1,11 @@
 
 <?php
 
-use vendor\jdl\App\Dispatcher;
+use vendor\jdl\App\Security;
 use vendor\jdl\Form\UtilisateurForm;
 
 
-if (Dispatcher::is_connected()) {
+if (Security::is_connected()) {
     echo '<a href="index.php?controller=ProjetController&method=createProjet"> Ajouter un projet : </a><br>';
     // ajouter le foreach ici 
     var_dump($_SESSION);

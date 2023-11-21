@@ -2,6 +2,8 @@
 
 namespace vendor\jdl\App;
 
+// Valide des formulaires
+
 final class Verifier
 {
   private function __construct()
