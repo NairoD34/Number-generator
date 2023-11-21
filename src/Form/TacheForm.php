@@ -17,7 +17,9 @@ class TacheForm
 
     public static function formNewTache($action)
     {
-        $form = "<form action = $action method='POST'>
+
+        $form = "<form action = $action&id=" . $_GET['id'] . " method='POST'
+
                 <label for = 'titre_tache'> Titre de votre tâche </label>
                 <input id='titre_tache' type='text' name='titre_tache'>
                 <label for = 'description'> Description de votre tâche </label>

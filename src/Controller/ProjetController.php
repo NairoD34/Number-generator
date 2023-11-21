@@ -28,9 +28,7 @@ class ProjetController extends AbstractController
         if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
-        if (!Security::is_connected()) {
-            Dispatcher::redirect();
-        }
+
 
         if (isset($_POST['submit'])) {
             $datas = [

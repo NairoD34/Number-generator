@@ -23,7 +23,7 @@ class UtilisateurForm
     public static function formConnect($action)
     {
         $form = "<form action = '$action' method='POST'>
-                <input id='id' name='id' value='' style='display:none'>
+                <input id='id' name='id' value='' type='hidden'>
                 <label for='username'>Nom d'utilisateur</label>
                 <input id='username' type='text' name='username' value =''>
                 <label for='password'>Mot de passe</label>

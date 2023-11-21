@@ -30,20 +30,20 @@ class TacheController extends AbstractController
 
         if (isset($_POST['submit'])) {
             $datas = [
-                'titre_tache' => $_POST['nom_projet'],
+                'titre_tache' => $_POST['titre_tache'],
+                'description' => $_POST['description'],
                 'id_utilisateur' => $_SESSION['id'],
-                'id_priorite' => $_POST['id_priorite'],
+                'id_priorite' => $_POST['priorite'],
                 'id_cdv' => 1,
-                'id_projet' => $_GET['id_projet']
-                // passer par session et pour attribuer le projet a la session qui en crée un
-                // 'id_utilisateur'=> 1,   
+                'id_projet' => $_GET['id']
+
             ];
 
-            Model::getInstance()->save('projet', $datas);
+            Model::getInstance()->save('tache', $datas);
 
-            //$this->displayProjets(); Méthode qui existe pas ???
+            Dispatcher::redirect('ProjetController', 'displayProjet', []);
         } else {
-            $this->render('createprojet.php', ['form' => TacheForm::formNewTache('?controller=ProjetController&method=createProjet')]);
+            $this->render('createtache.php', ['form' => TacheForm::formNewTache('?controller=TacheController&method=createTache')]);
         }
     }
 }
