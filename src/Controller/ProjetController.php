@@ -6,6 +6,7 @@ use vendor\jdl\App\AbstractController;
 use vendor\jdl\App\Dispatcher;
 use vendor\jdl\App\Security;
 use vendor\jdl\App\Model;
+use vendor\jdl\App\Verifier;
 use vendor\jdl\Form\ProjetForm;
 use vendor\jdl\Controller\TacheController;
 
@@ -13,13 +14,11 @@ class ProjetController extends AbstractController
 {
     public function displayProjets()
     {
-        // echo 'coucou';
-        if (Security::is_connected()) { // si connecté affiche les projets 
-            $result = Model::getInstance()->readAll('projet');
-            $this->render('projets.php', ['projets' => $result]);
-        } else {
+        if (!Security::is_connected()) { // si connecté affiche les projets 
             Dispatcher::redirect();  // redirection vers l'index si pas connecté
         }
+        $results = Model::getInstance()->readAll('projet');
+        $this->render('projets.php', ['projets' => $results]);
     }
 
     public function createProjet()
@@ -28,20 +27,22 @@ class ProjetController extends AbstractController
             Dispatcher::redirect();
         }
 
-        if (isset($_POST['submit'])) {
+        if (!isset($_POST['submit'])) {
+            $this->render('createprojet.php', ['form' => ProjetForm::formProjet(Dispatcher::generateUrl("ProjetController", "createProjet"))]);
+            return;
+        }
+
+        // Si le nom de projet est valide
+        if (($error = $this->isProjetNameInvalid($_POST['nom_projet'])) === false) {
             $datas = [
                 'nom_projet' => $_POST['nom_projet'],
                 'id_utilisateur' => $_SESSION['id'],
-                // passer par session et pour attribuer le projet a la session qui en crée un
-                // 'id_utilisateur'=> 1,   
             ];
-
             Model::getInstance()->save('projet', $datas);
-
             $this->displayProjets();
-        } else {
-            $this->render('createprojet.php', ['form' => ProjetForm::formProjet('?controller=ProjetController&method=createProjet')]);
+            return;
         }
+        $this->render('createprojet.php', ['form' => ProjetForm::formProjet(Dispatcher::generateUrl("ProjetController", "createProjet")), "error" => $error]);
     }
 
     public function displayProjet()
@@ -49,8 +50,16 @@ class ProjetController extends AbstractController
         if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
-        $result = Model::getInstance()->getById('projet', $_GET['id']);
-        $results = Model::getInstance()->getByAttribute('tache', 'id_projet', $_GET['id']);
-        $this->render('projet.php', ['taches' => $results, 'projet' => $result]);
+        $projet = Model::getInstance()->getById('projet', $_GET['id']);
+        $taches = Model::getInstance()->getByAttribute('tache', 'id_projet', $_GET['id_projet']);
+        $this->render('projet.php', ['taches' => $taches, 'projet' => $projet]);
+    }
+
+    private function isProjetNameInvalid(string $input):string|false
+    {
+        if (Verifier::hasHTMLShit($input)) {
+            return "Nom de projet invalide";
+        }
+        return false;
     }
 }

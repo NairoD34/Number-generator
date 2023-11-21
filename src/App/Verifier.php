@@ -53,4 +53,13 @@ final class Verifier
     }
     return true;
   }
+
+  // Renvoie true si la chaine passée en argument contient des caractères html dangereux : "'<>&
+  public static function hasHTMLShit(string $check):bool
+  {
+    if (htmlspecialchars($check) !== $check) {
+      return true;
+    }
+    return false;
+  }
 }
