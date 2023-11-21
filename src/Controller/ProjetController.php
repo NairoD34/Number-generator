@@ -47,6 +47,9 @@ class ProjetController extends AbstractController
 
     public function displayProjet()
     {
+        if (!Dispatcher::is_connected()) {
+            Dispatcher::redirect();
+        }
         $result = Model::getInstance()->getById('projet', $_GET['id']);
         $results = Model::getInstance()->readAll('tache');
         $this->render('projet.php', ['taches' => $results, 'projet' => $result]);
