@@ -55,7 +55,7 @@ class ProjetController extends AbstractController
         $this->render('projet.php', ['taches' => $taches, 'projet' => $projet]);
     }
 
-    private function isProjetNameInvalid(string $input):string|false
+    private function isProjetNameInvalid(string $input): string|false
     {
         if (Verifier::hasHTMLShit($input)) {
             return "Nom de projet invalide";
