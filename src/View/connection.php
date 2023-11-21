@@ -5,3 +5,7 @@ use vendor\jdl\App\Dispatcher;
 
 echo "<h1>Connectez-vous</h1>";
 echo UtilisateurForm::formConnect(Dispatcher::generateUrl("UtilisateurController", "displayConnectUtilisateur"));
+
+if (!empty($error)) {
+  echo "<pre>$error</pre>";
+}

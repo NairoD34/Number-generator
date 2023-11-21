@@ -42,6 +42,14 @@ class Model extends PDO
         return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . $entity)[0];
     }
 
+    /**
+     * 
+     */
+    public function getByFk($entity, $id, $foreign_entity)
+    {
+        $query = $this->query('select * from '.$entity.' where id_'.$foreign_entity.'='.$id);
+        return $query->fetchAll(PDO::FETCH_CLASS,Config::ENTITY.$entity);
+    }
 
     public function save($entity, $datas): void
     {
@@ -100,7 +108,7 @@ class Model extends PDO
         $preparedRequest->execute($preparedDatas);
     }
 
-    public function getByAttribute($entity, $attribute, $value, $comp = '=')
+    public function getByAttribute($entity, $attribute, $value, $comp = '='):array
     {
         // SELECT * FROM table WHERE attribute = value
         $query = $this->query("SELECT * FROM $entity WHERE $attribute $comp '$value'");
