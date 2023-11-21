@@ -14,13 +14,11 @@ class ProjetController extends AbstractController
 {
     public function displayProjets()
     {
-        // echo 'coucou';
-        if (Security::is_connected()) { // si connecté affiche les projets 
-            $result = Model::getInstance()->readAll('projet');
-            $this->render('projets.php', ['projets' => $result]);
-        } else {
+        if (!Security::is_connected()) { // si connecté affiche les projets 
             Dispatcher::redirect();  // redirection vers l'index si pas connecté
         }
+        $results = Model::getInstance()->readAll('projet');
+        $this->render('projets.php', ['projets' => $results]);
     }
 
     public function createProjet()
@@ -52,9 +50,9 @@ class ProjetController extends AbstractController
         if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
-        $result = Model::getInstance()->getById('projet', $_GET['id']);
-        $results = Model::getInstance()->getByAttribute('tache', 'id_projet', $_GET['id_projet']);
-        $this->render('projet.php', ['taches' => $results, 'projet' => $result]);
+        $projet = Model::getInstance()->getById('projet', $_GET['id']);
+        $taches = Model::getInstance()->getByAttribute('tache', 'id_projet', $_GET['id_projet']);
+        $this->render('projet.php', ['taches' => $taches, 'projet' => $projet]);
     }
 
     private function isProjetNameInvalid(string $input):string|false

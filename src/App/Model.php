@@ -22,6 +22,16 @@ class Model extends PDO
         }
     }
 
+    private function fetchQuery($query, $entity):array|null
+    {
+        $fetch = $query->fetchAll(PDO::FETCH_CLASS,Config::ENTITY.$entity);
+        if (empty($fetch)) {
+            return null;
+        } else {
+            return $fetch;
+        }  
+    }
+
     public static function getInstance():Model
     {
         if (self::$instance === null) {
@@ -30,13 +40,13 @@ class Model extends PDO
         return self::$instance;
     }
 
-    public function readAll($entity):array
+    public function readAll($entity):array|null
     {
         $query = $this->query(' select * from ' . $entity);
-        return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . $entity);
+        return $this->fetchQuery($query, $entity);
     }
 
-    public function getById($entity, $id):object
+    public function getById($entity, $id):object|null
     {
         $query = $this->query('select * from ' . $entity . ' where id_' . $entity . '=' . $id);
         return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . $entity)[0];
@@ -53,7 +63,7 @@ class Model extends PDO
     public function getByFk(string $entity, string $id, string $foreign_entity):array
     {
         $query = $this->query('select * from '.$entity.' where id_'.$foreign_entity.'='.$id);
-        return $query->fetchAll(PDO::FETCH_CLASS,Config::ENTITY.$entity);
+        return $this->fetchQuery($query, $entity);
     }
 
     public function save($entity, $datas):void
