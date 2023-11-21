@@ -14,13 +14,12 @@ class ProjetController extends AbstractController
     public function displayProjets()
     {
         // echo 'coucou';
-        if (Security::is_connected()) {
+        if (Security::is_connected()) { // si connecté affiche les projets 
             $result = Model::getInstance()->readAll('projet');
             $this->render('projets.php', ['projets' => $result]);
         } else {
-            Dispatcher::redirect();
+            Dispatcher::redirect();  // redirection vers l'index si pas connecté
         }
-        // pas connecté -> redirect index
     }
 
     public function displayProjetUtilisateur()
@@ -31,9 +30,6 @@ class ProjetController extends AbstractController
 
     public function createProjet()
     {
-        if (!Security::is_connected()) {
-            Dispatcher::redirect();
-        }
         if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
