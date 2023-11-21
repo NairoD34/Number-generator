@@ -50,7 +50,7 @@ class ProjetController extends AbstractController
         if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
-        $projet = Model::getInstance()->getById('projet', $_GET['id']);
+        $projet = Model::getInstance()->getById('projet', $_GET['id_projet']);
         $taches = Model::getInstance()->getByAttribute('tache', 'id_projet', $_GET['id_projet']);
         $this->render('projet.php', ['taches' => $taches, 'projet' => $projet]);
     }
