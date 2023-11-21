@@ -22,17 +22,17 @@ class Model extends PDO
         }
     }
 
-    private function fetchQuery($query, $entity):array|null
+    private function fetchQuery($query, $entity): array|null
     {
-        $fetch = $query->fetchAll(PDO::FETCH_CLASS,Config::ENTITY.$entity);
+        $fetch = $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . $entity);
         if (empty($fetch)) {
             return null;
         } else {
             return $fetch;
-        }  
+        }
     }
 
-    public static function getInstance():Model
+    public static function getInstance(): Model
     {
         if (self::$instance === null) {
             self::$instance = new static();
@@ -40,13 +40,13 @@ class Model extends PDO
         return self::$instance;
     }
 
-    public function readAll($entity):array|null
+    public function readAll($entity): array|null
     {
         $query = $this->query(' select * from ' . $entity);
         return $this->fetchQuery($query, $entity);
     }
 
-    public function getById($entity, $id):object|null
+    public function getById($entity, $id): object|null
     {
         $query = $this->query('select * from ' . $entity . ' where id_' . $entity . '=' . $id);
         return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . $entity)[0];
@@ -60,13 +60,13 @@ class Model extends PDO
      * @param string $id : la valeur de la clé étrangère
      * @param string $foreing_entity : l'entité étrangère
      */
-    public function getByFk(string $entity, string $id, string $foreign_entity):array
+    public function getByFk(string $entity, string $id, string $foreign_entity): array
     {
-        $query = $this->query('select * from '.$entity.' where id_'.$foreign_entity.'='.$id);
+        $query = $this->query('select * from ' . $entity . ' where id_' . $foreign_entity . '=' . $id);
         return $this->fetchQuery($query, $entity);
     }
 
-    public function save($entity, $datas):void
+    public function save($entity, $datas): void
     {
         $sql = 'INSERT into ' . $entity . ' (';
         $count = count($datas) - 1;
@@ -94,14 +94,14 @@ class Model extends PDO
         $preparedRequest->execute($preparedDatas);
     }
 
-    public function supprById($entity, $id):void
+    public function supprById($entity, $id): void
     {
-        $sql = 'delete from ' . $entity . ' where id=' . $id;
+        $sql = 'delete from ' . $entity . ' where id_' . $entity . '=' . $id;
         $preparedSql = $this->prepare($sql);
         $preparedSql->execute();
     }
 
-    public function updateById($entity, $id,  $datas):void
+    public function updateById($entity, $id,  $datas): void
     {
         $sql = 'UPDATE ' . $entity . ' SET ';
         $count = count($datas) - 1;
@@ -120,7 +120,7 @@ class Model extends PDO
         $preparedRequest->execute($preparedDatas);
     }
 
-    public function getByAttribute($entity, $attribute, $value, $comp = '='):array
+    public function getByAttribute($entity, $attribute, $value, $comp = '='): array
     {
         // SELECT * FROM table WHERE attribute = value
         $query = $this->query("SELECT * FROM $entity WHERE $attribute $comp '$value'");
