@@ -22,7 +22,7 @@ class Model extends PDO
         }
     }
 
-    public static function getInstance()
+    public static function getInstance():Model
     {
         if (self::$instance === null) {
             self::$instance = new static();
@@ -30,13 +30,13 @@ class Model extends PDO
         return self::$instance;
     }
 
-    public function readAll($entity)
+    public function readAll($entity):array
     {
         $query = $this->query(' select * from ' . $entity);
         return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . $entity);
     }
 
-    public function getById($entity, $id)
+    public function getById($entity, $id):object
     {
         $query = $this->query('select * from ' . $entity . ' where id_' . $entity . '=' . $id);
         return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . $entity)[0];
@@ -56,7 +56,7 @@ class Model extends PDO
         return $query->fetchAll(PDO::FETCH_CLASS,Config::ENTITY.$entity);
     }
 
-    public function save($entity, $datas): void
+    public function save($entity, $datas):void
     {
         $sql = 'INSERT into ' . $entity . ' (';
         $count = count($datas) - 1;
@@ -80,19 +80,18 @@ class Model extends PDO
             $i++;
         }
         $sql = $sql . ')';
-        // echo $sql . '<br>';
-        // var_dump($preparedDatas);
         $preparedRequest = $this->prepare($sql);
         $preparedRequest->execute($preparedDatas);
     }
-    public function supprById($entity, $id)
+
+    public function supprById($entity, $id):void
     {
         $sql = 'delete from ' . $entity . ' where id=' . $id;
         $preparedSql = $this->prepare($sql);
         $preparedSql->execute();
     }
 
-    public function updateById($entity, $id,  $datas)
+    public function updateById($entity, $id,  $datas):void
     {
         $sql = 'UPDATE ' . $entity . ' SET ';
         $count = count($datas) - 1;
@@ -107,8 +106,6 @@ class Model extends PDO
             $i++;
         }
         $sql = $sql . " WHERE id = '$id'";
-        echo $sql . "<br>";
-        var_dump($preparedDatas);
         $preparedRequest = $this->prepare($sql);
         $preparedRequest->execute($preparedDatas);
     }
