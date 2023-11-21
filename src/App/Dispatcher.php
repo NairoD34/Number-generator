@@ -49,9 +49,9 @@ class Dispatcher
     /**
      * Redirige sur la page indiquée
      */
-    public static function redirect($controllerName="", $method="")
+    public static function redirect($controllerName="", $method="", ?array $query=null)
     {
-        header('location: '.self::generateUrl($controllerName,$method));
+        header('location: '.self::generateUrl($controllerName, $method, $query));
     }
 
     /**
