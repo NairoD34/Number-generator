@@ -43,9 +43,14 @@ class Model extends PDO
     }
 
     /**
-     * 
+     * Méthode permettant de récupérer toutes les lignes de la table $entity où la clé étrangère de
+     * $foreign_entity égale $id.
+     * 'SELECT * FROM '.$entity.' WHERE id_'.$foreign_entity.'='.$id
+     * @param string $entity : la table dans laquelle on select
+     * @param string $id : la valeur de la clé étrangère
+     * @param string $foreing_entity : l'entité étrangère
      */
-    public function getByFk($entity, $id, $foreign_entity)
+    public function getByFk(string $entity, string $id, string $foreign_entity):array
     {
         $query = $this->query('select * from '.$entity.' where id_'.$foreign_entity.'='.$id);
         return $query->fetchAll(PDO::FETCH_CLASS,Config::ENTITY.$entity);
