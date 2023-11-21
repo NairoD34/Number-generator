@@ -35,6 +35,7 @@ class Dispatcher
     {
         if (empty($controllerName) && empty($method)) {
             return 'index.php';
+            
         }
         $url = 'index.php?controller='.$controllerName.'&method='.$method;
         if (is_array($query) && count($query)>0) {

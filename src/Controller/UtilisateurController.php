@@ -52,6 +52,12 @@ class UtilisateurController extends AbstractController
     // cette fonction nous permet d'afficher le formulaire d'enregistrement et de le traiter
     public function displayCreateUtilisateur()
     {
+        // Si on est déjà connectéx, on redirige vers l'accueil
+        if (Dispatcher::is_connected()) {
+            Dispatcher::redirect();
+        }
+
+        // Si l'utilisateur a posté une inscription remplie, on la traite.
         if (isset($_POST['submit']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['verif'])) {
             $datas = [
                 'nom_utilisateur' => $_POST['username'],
@@ -86,40 +92,43 @@ class UtilisateurController extends AbstractController
         Dispatcher::redirect();
     }
 
-
+    /**
+     * Affiche le formulaire de connexion
+     */
     public function displayConnectUtilisateur()
     {
-        if (isset($_POST['submit'])) {
-            if ($this->verifyConnect()) {
-
-                $index = new IndexController();
-                $index->index();
-                echo 'Vous êtes connecté';
-                var_dump($_SESSION);
-                return true;
-            }
+        // Si l'utilisateur ne tente pas de se connecter, on ne traite pas le formulaire
+        if (!isset($_POST['submit'])) {
+            $this->render('connection.php', []);
+            return;
         }
-        $this->render('connection.php', []);
+
+        // On traite le formulaire.
+        if (($error = $this->verifyConnect()) === false || Dispatcher::is_connected()) {
+            Dispatcher::redirect();
+        }
+
+        $this->render('connection.php', ["error" => $error]); 
     }
 
-    private function verifyConnect()
+    /**
+     * Passe en revue le formulaire de connexion.
+     * @return string|false : retourne un string qui contient le message d'erreur ou false s'il n'y a aucune erreur
+     */
+    private function verifyConnect():string|false
     {
-        $error = false;
-        if (isset($_POST['submit'])) {
-            $user = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']);
-            if (!empty($user)) {
-                if (password_verify($_POST['password'], $user[0]->getMdp())) {
-                    $_SESSION['id'] = $user[0]->getId_Utilisateur();
-                    $_SESSION['username'] = $_POST['username'];
-                    $_SESSION['connected'] = 'connecté';
-                    return true;
-                } else {
-                    $error = 'identifiants non reconnu';
-                }
-            } else {
-                $error = 'Identifiants non reconnu';
-            }
+        if (!isset($_POST['submit'])) {
+            return "Requête invalide";
         }
-        return $error;
+
+        $user = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']);
+        if (empty($user) || !password_verify($_POST['password'], $user[0]->getMdp())) {
+            return "Identifiants non reconnus";
+        }
+
+        $_SESSION['id'] = $user[0]->getId_Utilisateur();
+        $_SESSION['username'] = $_POST['username'];
+        $_SESSION['connected'] = 'connecté';
+        return false;
     }
 }
