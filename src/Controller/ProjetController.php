@@ -4,6 +4,7 @@ namespace vendor\jdl\Controller;
 
 use vendor\jdl\App\AbstractController;
 use vendor\jdl\App\Dispatcher;
+use vendor\jdl\App\Security;
 use vendor\jdl\App\Model;
 use vendor\jdl\Form\ProjetForm;
 use vendor\jdl\Controller\TacheController;
@@ -13,7 +14,7 @@ class ProjetController extends AbstractController
     public function displayProjets()
     {
         // echo 'coucou';
-        if (Dispatcher::is_connected()) {
+        if (Security::is_connected()) {
             $result = Model::getInstance()->readAll('projet');
             $this->render('projets.php', ['projets' => $result]);
         } else {
@@ -24,10 +25,10 @@ class ProjetController extends AbstractController
 
     public function createProjet()
     {
-        if (!Dispatcher::is_connected()) {
+        if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
-        if (!Dispatcher::is_connected()) {
+        if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
 
@@ -50,7 +51,7 @@ class ProjetController extends AbstractController
 
     public function displayProjet()
     {
-        if (!Dispatcher::is_connected()) {
+        if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
         $result = Model::getInstance()->getById('projet', $_GET['id']);

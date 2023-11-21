@@ -31,7 +31,7 @@ class Dispatcher
     /**
      * Génère une URL avec le nom du controlleur et sa méthode
      */
-    public static function generateUrl(string $controllerName="", string $method="", ?string $query=null):string
+    public static function generateUrl(string $controllerName="", string $method="", ?array $query=null):string
     {
         if (empty($controllerName) && empty($method)) {
             return 'index.php';
@@ -56,12 +56,13 @@ class Dispatcher
 
     /**
      * Vérifie si l'user est connectéx
+     * Méthode déplacée dans : Security.php
      */
-    public static function is_connected()
-    {
-        if (isset($_SESSION['username'])) {
-            return true;
-        }
-        return false;
-    }
+    // public static function is_connected()
+    // {
+    //     if (isset($_SESSION['username'])) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
 }

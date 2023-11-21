@@ -4,6 +4,7 @@ namespace vendor\jdl\Controller;
 
 use vendor\jdl\App\AbstractController;
 use vendor\jdl\App\Dispatcher;
+use vendor\jdl\App\Security;
 use vendor\jdl\App\Model;
 // use vendor\jdl\Entity\Utilisateur;
 // use vendor\jdl\Form\CreationUtilisateurForm;
@@ -53,7 +54,7 @@ class UtilisateurController extends AbstractController
     public function displayCreateUtilisateur()
     {
         // Si on est déjà connectéx, on redirige vers l'accueil
-        if (Dispatcher::is_connected()) {
+        if (Security::is_connected()) {
             Dispatcher::redirect();
         }
 
@@ -66,9 +67,8 @@ class UtilisateurController extends AbstractController
             ];
             if ($this->verifRegister()) {
                 $this->createUtilisateur($datas);
-                $index = new IndexController();
-                $index->index();
-                echo 'Votre compte à bien été créé';
+                Dispatcher::redirect();
+                // 'Votre compte à bien été créé';
                 return true;
             }
         }
@@ -86,7 +86,7 @@ class UtilisateurController extends AbstractController
      */
     public function disconnect()
     {
-        if (Dispatcher::is_connected()) {
+        if (Security::is_connected()) {
             session_unset();     
         }
         Dispatcher::redirect();
@@ -104,7 +104,7 @@ class UtilisateurController extends AbstractController
         }
 
         // On traite le formulaire.
-        if (($error = $this->verifyConnect()) === false || Dispatcher::is_connected()) {
+        if (($error = $this->verifyConnect()) === false || Security::is_connected()) {
             Dispatcher::redirect();
         }
 
