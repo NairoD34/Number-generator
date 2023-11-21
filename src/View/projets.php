@@ -2,6 +2,8 @@
 <?php
 
 use vendor\jdl\App\Dispatcher;
+use vendor\jdl\Form\UtilisateurForm;
+
 
 if (Dispatcher::is_connected()) {
     echo '<a href="index.php?controller=ProjetController&method=createProjet"> Ajouter un projet : </a><br>';
