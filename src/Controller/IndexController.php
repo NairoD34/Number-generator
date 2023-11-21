@@ -14,7 +14,6 @@ class IndexController extends AbstractController
 
     public function index()
     {
-        var_dump(Security::hasHTMLShit("hello world"));
         $this->render('index.php', []);
 
     }
