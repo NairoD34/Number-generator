@@ -7,11 +7,10 @@ use vendor\jdl\App\Model;
 class TacheForm
 {
 
-
     public static function formNewTache($action)
     {
 
-        $form = "<form action = $action&id_projet=" . $_GET['id_projet'] . " method='POST'
+        $form = "<form action = $action method='POST'
 
                 <label for = 'titre_tache'> Titre de votre tâche </label>
                 <input id='titre_tache' type='text' name='titre_tache'>
