@@ -6,14 +6,7 @@ use vendor\jdl\App\Model;
 
 class TacheForm
 {
-    public static function createForm($action, $mode = 'create', $id = 0)
-    {
-        if ($mode === 'update') {
-            $projet = Model::getInstance()->getById('projet', $id);
-            return self::formUpdateTache($action, $projet);
-        }
-        return self::formNewTache($action);
-    }
+
 
     public static function formNewTache($action)
     {

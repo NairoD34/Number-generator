@@ -3,7 +3,7 @@
 
 use vendor\jdl\App\Security;
 use vendor\jdl\App\Dispatcher;
-use vendor\jdl\Form\UtilisateurForm;
+
 
 // var_dump($_SESSION);
 if (Security::is_connected()) {
@@ -16,7 +16,7 @@ if (Security::is_connected()) {
         if ($_SESSION['id'] == $value->getId_utilisateur()) {
             // ajouter un if avec la table participe 
 
-            echo '<a href='.Dispatcher::generateUrl('ProjetController', 'displayProjet') . '&id=' . $value->getId_projet() .'>' . $value->getNom_projet() . '<br>' . '</a>';
+            echo '<a href=' . Dispatcher::generateUrl('ProjetController', 'displayProjet', ['&id=' . $value->getId_projet()]) . '>' . $value->getNom_projet() . '<br>' . '</a>';
         }
     }
 }

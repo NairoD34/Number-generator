@@ -50,7 +50,7 @@ class ProjetController extends AbstractController
             Dispatcher::redirect();
         }
         $result = Model::getInstance()->getById('projet', $_GET['id']);
-        $results = Model::getInstance()->getByAttribute('tache', 'id_projet', $_GET['id_projet']);
+        $results = Model::getInstance()->getByAttribute('tache', 'id_projet', $_GET['id']);
         $this->render('projet.php', ['taches' => $results, 'projet' => $result]);
     }
 }

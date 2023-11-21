@@ -2,9 +2,8 @@
 
 use vendor\jdl\App\Dispatcher;
 
-echo "<a href=" . Dispatcher::generateUrl('TacheController', 'createTache') . ">Créer une nouvelle tâche</a>";
+echo "<a href=" . Dispatcher::generateUrl('TacheController', 'createTache') . ">Créer une nouvelle tâche</a><br>";
 
-var_dump($_SESSION);
 echo "Nom de la tâche : " . $tache->getTitre_tache() . "<br>";
 echo "Description de la tâche : " . $tache->getDescription() . "<br>";
 echo "Priorité de la tâche : " . $priorite[0]->getLibelle() . "<br>";
