@@ -35,7 +35,7 @@ class TacheController extends AbstractController
                 'id_utilisateur' => $_SESSION['id'],
                 'id_priorite' => $_POST['priorite'],
                 'id_cdv' => 1,
-                'id_projet' => $_GET['id']
+                'id_projet' => $_GET['id'],
 
             ];
 
