@@ -16,7 +16,7 @@ class TacheController extends AbstractController
             Dispatcher::redirect();
         }
 
-        $result = Model::getInstance()->getById('tache', $_GET['id']);
+        $result = Model::getInstance()->getById('tache', $_GET['id_tache']);
         $user = Model::getInstance()->getByAttribute('utilisateur', 'id_utilisateur', $_GET['id_utilisateur']);
         $priorite = Model::getInstance()->getByAttribute('priorite', 'id_priorite', $_GET['id_priorite']);
         $cdv = Model::getInstance()->getByAttribute('cycle_de_vie', 'id_cdv', $_GET['id_cdv']);
