@@ -5,7 +5,7 @@ use vendor\jdl\App\Security;
 use vendor\jdl\App\Dispatcher;
 use vendor\jdl\Form\UtilisateurForm;
 
-var_dump($_SESSION);
+// var_dump($_SESSION);
 if (Security::is_connected()) {
     echo '<a href="index.php?controller=ProjetController&method=createProjet"> Ajouter un projet : </a><br><br>';
     // ajouter le foreach ici 
