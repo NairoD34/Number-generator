@@ -13,11 +13,7 @@ class ProjetController extends AbstractController
 {
     public function displayProjets()
     {
-        // echo 'coucou';
-        if (Security::is_connected()) {
-            $result = Model::getInstance()->readAll('projet');
-            $this->render('projets.php', ['projets' => $result]);
-        } else {
+        if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
         // pas connecté -> redirect index
@@ -28,9 +24,6 @@ class ProjetController extends AbstractController
         if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
-        if (!Security::is_connected()) {
-            Dispatcher::redirect();
-        }
 
         if (isset($_POST['submit'])) {
             $datas = [
@@ -38,7 +31,6 @@ class ProjetController extends AbstractController
                 'id_utilisateur' => $_SESSION['id'],
                 // passer par session et pour attribuer le projet a la session qui en crée un
                 // 'id_utilisateur'=> 1,   
-
             ];
 
             Model::getInstance()->save('projet', $datas);
