@@ -6,6 +6,7 @@ use vendor\jdl\App\AbstractController;
 use vendor\jdl\App\Dispatcher;
 use vendor\jdl\App\Security;
 use vendor\jdl\App\Model;
+use vendor\jdl\App\Verifier;
 use vendor\jdl\Form\ProjetForm;
 use vendor\jdl\Controller\TacheController;
 
@@ -28,20 +29,22 @@ class ProjetController extends AbstractController
             Dispatcher::redirect();
         }
 
-        if (isset($_POST['submit'])) {
+        if (!isset($_POST['submit'])) {
+            $this->render('createprojet.php', ['form' => ProjetForm::formProjet(Dispatcher::generateUrl("ProjetController", "createProjet"))]);
+            return;
+        }
+
+        // Si le nom de projet est valide
+        if (($error = $this->isProjetNameInvalid($_POST['nom_projet'])) === false) {
             $datas = [
                 'nom_projet' => $_POST['nom_projet'],
                 'id_utilisateur' => $_SESSION['id'],
-                // passer par session et pour attribuer le projet a la session qui en crée un
-                // 'id_utilisateur'=> 1,   
             ];
-
             Model::getInstance()->save('projet', $datas);
-
             $this->displayProjets();
-        } else {
-            $this->render('createprojet.php', ['form' => ProjetForm::formProjet('?controller=ProjetController&method=createProjet')]);
+            return;
         }
+        $this->render('createprojet.php', ['form' => ProjetForm::formProjet(Dispatcher::generateUrl("ProjetController", "createProjet")), "error" => $error]);
     }
 
     public function displayProjet()
@@ -52,5 +55,13 @@ class ProjetController extends AbstractController
         $result = Model::getInstance()->getById('projet', $_GET['id']);
         $results = Model::getInstance()->getByAttribute('tache', 'id_projet', $_GET['id_projet']);
         $this->render('projet.php', ['taches' => $results, 'projet' => $result]);
+    }
+
+    private function isProjetNameInvalid(string $input):string|false
+    {
+        if (Verifier::hasHTMLShit($input)) {
+            return "Nom de projet invalide";
+        }
+        return false;
     }
 }

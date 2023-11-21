@@ -11,13 +11,4 @@ abstract class Security {
       }
       return false;
   }
-
-  // Renvoie 
-  public static function hasHTMLShit(string $check):bool
-  {
-    if (htmlspecialchars($check) !== $check) {
-      return true;
-    }
-    return false;
-  }
 }
