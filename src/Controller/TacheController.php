@@ -7,7 +7,12 @@ use vendor\jdl\App\AbstractController;
 
 class TacheController extends AbstractController
 {
-    public function displayTaches()
+    public function displayTache()
     {
+        $result = Model::getInstance()->getById('tache', $_GET['id']);
+        $user = Model::getInstance()->getByAttribute('utilisateur', 'id_utilisateur', $_GET['id_utilisateur']);
+        $priorite = Model::getInstance()->getByAttribute('priorite', 'id_priorite', $_GET['id_priorite']);
+        $cdv = Model::getInstance()->getByAttribute('cycle_de_vie', 'id_cdv', $_GET['id_cdv']);
+        $this->render('tache.php', ['utilisateurs' => $user, 'tache' => $result, 'priorite' => $priorite, 'cdv' => $cdv]);
     }
 }
