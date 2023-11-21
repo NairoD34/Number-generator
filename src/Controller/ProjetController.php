@@ -22,9 +22,10 @@ class ProjetController extends AbstractController
         // pas connecté -> redirect index
     }
 
-    public function displayProjetUtilisateur(){
+    public function displayProjetUtilisateur()
+    {
         $result = Model::getInstance()->getById('projet', $_GET['id']);
-        $this->render('projets.php', ['projets'=> $result]);
+        $this->render('projets.php', ['projets' => $result]);
     }
 
     public function createProjet()
@@ -59,7 +60,7 @@ class ProjetController extends AbstractController
             Dispatcher::redirect();
         }
         $result = Model::getInstance()->getById('projet', $_GET['id']);
-        $results = Model::getInstance()->readAll('tache');
+        $results = Model::getInstance()->getByAttribute('tache', 'id_projet', $_GET['id_projet']);
         $this->render('projet.php', ['taches' => $results, 'projet' => $result]);
     }
 }
