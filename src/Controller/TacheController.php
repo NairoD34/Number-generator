@@ -12,6 +12,7 @@ class TacheController extends AbstractController
 {
     public function displayTache()
     {
+        // Ceci n'est pas sécurisé ***************************************************
         if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
