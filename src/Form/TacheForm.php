@@ -4,37 +4,48 @@ namespace vendor\jdl\Form;
 
 use vendor\jdl\App\Model;
 
+// TEST THIS
+
 class TacheForm
 {
 
-    public static function formNewTache($action)
+    private static function getForm(string $action, 
+        string $titre_tache="",
+        string $description="",
+        string $priorite="" )
     {
-
         $form = "<form action = $action method='POST'
-                <label for = 'titre_tache'> Titre de votre tâche </label>
-                <input id='titre_tache' type='text' name='titre_tache'>
-                <label for = 'description'> Description de votre tâche </label>
-                <input id='description' type='text' name='description'>
-                <label for = 'priorite-select'>Niveau d'urgence</label>
-                <select name='priorite' id='priorite-select'>
-                <option value =''> -- Choisissez un niveau d'urgence --</option>
-                <option value = '1'>ROUGE</option>
-                <option value = '2'>ORANGE</option>
-                <option value = '3'>JAUNE</option>
-                <option value = '4'>VERT</option>
-                </select>
-                <button name='submit' id= 'submit'> submit </button>
-                </form>";
-        // $this->render('projet.php', ['form'=> $form]);
+            <label for = 'titre_tache'> Titre de votre tâche </label>
+            <input id='titre_tache' type='text' name='titre_tache' value='$titre_tache'>
+            <label for = 'description'> Description de votre tâche </label>
+            <input id='description' type='text' name='description' value='$description'>
+            <label for = 'priorite-select'>Niveau d'urgence</label>
+            <select name='priorite' id='priorite-select'>";
+        $options = ["-" => "-- Choisissez un niveau d'urgence --", "1" => "ROUGE", "2" =>"ORANGE", "3" =>"JAUNE", "4" =>"VERT"];
+        foreach ($options as $key=>$option) {
+            $form .= "<option value='$key'";
+            if ($priorite === $key) {
+                $form .= " selected";
+            }
+            $form .= ">$option</option>";
+        }
+
+        $form .= "</select>
+            <button name='submit' id= 'submit'> submit </button>
+            </form>";
         return $form;
     }
 
-    public static function formUpdateTache($action, $projet)
+    public static function formNewTache($action)
     {
-        $form = "<form action = $action method= 'POST'>
-                <p>TEST</p>
-                <button name='submit' value='submit'> submit </button>
-                </form>";
-        return $form;
+        return self::getForm($action);
+    }
+
+    public static function formUpdateTache(string $action, 
+        string $titre_tache="",
+        string $description="",
+        string $priorite="")
+    {
+        return self::getForm($action, $titre_tache, $description, $priorite);
     }
 }
