@@ -2,10 +2,6 @@
 
 namespace vendor\jdl\Form;
 
-use vendor\jdl\App\Model;
-
-// TEST THIS
-
 class TacheForm
 {
 
