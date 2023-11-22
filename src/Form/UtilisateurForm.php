@@ -28,7 +28,6 @@ class UtilisateurForm
                 <input id='username' type='text' name='username' value =''>
                 <label for='password'>Mot de passe</label>
                 <input id='password' type='password' name='password' value =''>
-                
                 <button name='submit' value='submit'>Se connecter</button>
             </form>";
         return $form;
