@@ -66,6 +66,26 @@ class Model extends PDO
         return $this->fetchQuery($query, $entity);
     }
 
+    /**
+     * retourne un tableau d'objets qui correspond aux associations entité / clé passées en argument
+     * les ids mentionnés: clés primaires et étrangères
+     * écrire le deuxième argument comme suit : ["entity" => "id", "entity2" => "id2"]
+     */
+    public function getByIds(string $entity, array $entitiesAndIds): array|null
+    {
+        $sql = "SELECT * FROM $entity WHERE ";
+        $count = count($entitiesAndIds) - 1;
+        foreach($entitiesAndIds as $entityKey => $id) {
+            $sql .= "id_$entityKey = $id ";
+            if ($count > 0) {
+                $sql .= "AND ";
+                $count --;
+            }
+        }
+        $query = $this->query($sql);
+        return $this->fetchQuery($query, $entity);
+    }
+
     public function save($entity, $datas): void
     {
         $sql = 'INSERT into ' . $entity . ' (';

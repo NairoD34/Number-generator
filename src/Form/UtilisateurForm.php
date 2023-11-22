@@ -2,8 +2,6 @@
 
 namespace vendor\jdl\Form;
 
-use vendor\jdl\App\Model;
-
 class UtilisateurForm
 {
     public static function formSubscribe($action)

@@ -27,4 +27,15 @@ abstract class Security {
     }
     return true;
   }
+
+  public static function get_session_user():object|null
+  {
+    if (!self::is_connected()) {
+      return null;
+    }
+    if (empty($user = Model::getInstance()->getByAttribute("utilisateur", "nom_utilisateur", $_SESSION['username'])[0])) {
+      return null;
+    }
+    return $user;
+  }
 }
