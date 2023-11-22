@@ -150,6 +150,7 @@ class Model extends PDO
     // Pour récupérer spécifiquement tous les projets rattachés à un utilisateur (admin ou pas)
     public function getProjetsByIdUtilisateur($id_utilisateur)
     {
+        // C'est de la merde, réécrire
         $sql = "SELECT p.id_projet, p.nom_projet, p.id_utilisateur
             FROM projet p 
             LEFT JOIN participe p2
