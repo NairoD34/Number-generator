@@ -11,4 +11,12 @@ abstract class Security {
       }
       return false;
   }
+
+  public static function utilisateur_exists(string $id_utilisateur):bool
+  {
+    if (empty(Model::getInstance()->getByAttribute('utilisateur', 'id_utilisateur', $id_utilisateur))){
+      return false;
+    }
+    return true;
+  }
 }
