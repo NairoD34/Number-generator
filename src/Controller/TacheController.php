@@ -12,17 +12,21 @@ class TacheController extends AbstractController
 {
     public function displayTache()
     {
-        if (!Security::is_connected()) {
+        // Ceci n'est pas sécurisé ***************************************************
+        if (!Security::is_connected() || $this->canSeeTache($_GET['id_tache'], $_GET['id_projet']) === false) {
             Dispatcher::redirect();
         }
+        $tache = Model::getInstance()->getById('tache', $_GET['id_tache']);
+        $priorite = Model::getInstance()->getById('priorite', $tache->getId_priorite());
+        $cdv = Model::getInstance()->getCdvById('cycle_de_vie', $tache->getId_cdv());
+        $user = Model::getInstance()->getById('utilisateur', $tache->getId_utilisateur());
 
-
-        $priorite = Model::getInstance()->getByAttribute('priorite', 'id_priorite', $_GET['id_priorite']);
-        $cdv = Model::getInstance()->getByAttribute('cycle_de_vie', 'id_cdv', $_GET['id_cdv']);
-        $this->render('tache.php', ['utilisateurs' => Model::getInstance()->getByAttribute('utilisateur', 'id_utilisateur', $_SESSION['id']), 'tache' => Model::getInstance()->getById('tache', $_GET['id_tache']), 'priorite' => $priorite, 'cdv' => $cdv]);
+        $this->render('tache.php', ['tache' => $tache, 'priorite' => $priorite->getLibelle(), 'cdv' => $cdv->getLibelle(), 'utilisateurs' => $user->getNom_utilisateur()]);
     }
+
     public function createTache()
     {
+        // Ceci n'est pas sécurisé **************************************************
         if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
@@ -45,12 +49,15 @@ class TacheController extends AbstractController
             $this->render('createtache.php', ['form' => TacheForm::formNewTache(Dispatcher::generateUrl("TacheController", "createTache", ["id_projet" => $_GET["id_projet"]]))]);
         }
     }
+
     private function supprTache($id)
     {
         Model::getInstance()->supprById('tache', $id);
     }
+
     public function displaySupprTache()
     {
+        // Ceci n'est pas sécurisé **************************************************
         if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
@@ -59,5 +66,26 @@ class TacheController extends AbstractController
             $this->supprTache($_GET['id_tache']);
             Dispatcher::redirect('projetController', 'displayProjet', ["id_projet" => $_GET["id_projet"]]);
         }
+    }
+    // ça marche pas il faut la changer
+    private function canSeeTache($id_tache, $id_projet)
+    {
+        if (!Security::does_this_exist("tache", $id_tache)) {
+            return false;
+        }
+
+        if (is_null($user = Security::get_session_user())) {
+            return false;
+        }
+        $id_user = $user->getId_utilisateur();
+
+        $associations = Model::getInstance()->getByIds("participe", ["utilisateur" => $id_user, "projet" => $id_projet]);
+        var_dump($associations);
+        $admin = Model::getInstance()->getByIds("projet", ["utilisateur" => $id_user, "projet" => $id_projet]);
+        var_dump($admin);
+        if (empty($associations) && empty($admin)) {
+            return false;
+        }
+        return true;
     }
 }

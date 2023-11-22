@@ -38,6 +38,7 @@ class ProjetController extends AbstractController
                 'nom_projet' => $_POST['nom_projet'],
                 'id_utilisateur' => $_SESSION['id'],
             ];
+
             Model::getInstance()->save('projet', $datas);
             $this->displayProjets();
             return;
@@ -47,12 +48,30 @@ class ProjetController extends AbstractController
 
     public function displayProjet()
     {
-        if (!Security::is_connected()) {
+        if (!Security::is_connected() || !$this->canSeeProjet($_GET['id_projet'])) {
             Dispatcher::redirect();
         }
+
         $projet = Model::getInstance()->getById('projet', $_GET['id_projet']);
         $taches = Model::getInstance()->getByAttribute('tache', 'id_projet', $_GET['id_projet']);
         $this->render('projet.php', ['taches' => $taches, 'projet' => $projet]);
+    }
+
+    private function canSeeProjet($id_projet)
+    {
+        if (!Security::does_this_exist("projet", $id_projet)) {
+            return false;
+        }
+        if (is_null($user = Security::get_session_user())) {
+            return false;
+        }
+        $id_user = $user->getId_utilisateur();
+        $associations = Model::getInstance()->getByIds("participe", ["utilisateur" => $id_user, "projet" => $id_projet]);
+        $admin = Model::getInstance()->getByIds("projet", ["utilisateur" => $id_user, "projet" => $id_projet]);
+        if (empty($associations) && empty($admin)) {
+            return false;
+        }
+        return true;
     }
 
     private function isProjetNameInvalid(string $input): string|false
