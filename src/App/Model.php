@@ -166,4 +166,16 @@ class Model extends PDO
         $query = $this->query($sql);
         return $this->fetchQuery($query, $entity);
     }
+    // Pour récupérer spécifiquement tous les projets rattachés à un utilisateur (admin ou pas)
+    public function getProjetsByIdUtilisateur($id_utilisateur)
+    {
+        $sql = "SELECT p.id_projet, p.nom_projet, p.id_utilisateur
+            FROM projet p 
+            LEFT JOIN participe p2
+            ON p.id_projet = p2.id_projet
+            WHERE p.id_utilisateur = $id_utilisateur
+            OR p2.id_utilisateur = $id_utilisateur";
+        $query = $this->query($sql);
+        return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . "projet");
+    }
 }

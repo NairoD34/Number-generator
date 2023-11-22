@@ -17,7 +17,7 @@ class ProjetController extends AbstractController
         if (!Security::is_connected()) { // si connecté affiche les projets 
             Dispatcher::redirect();  // redirection vers l'index si pas connecté
         }
-        $results = Model::getInstance()->readAll('projet');
+        $results = Model::getInstance()->getProjetsByIdUtilisateur(Security::get_session_user()->getId_utilisateur());
         $this->render('projets.php', ['projets' => $results]);
     }
 
@@ -57,7 +57,7 @@ class ProjetController extends AbstractController
         $this->render('projet.php', ['taches' => $taches, 'projet' => $projet]);
     }
 
-    private function canSeeProjet($id_projet)
+    private function canSeeProjet($id_projet):bool
     {
         if (!Security::does_this_exist("projet", $id_projet)) {
             return false;

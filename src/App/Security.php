@@ -21,6 +21,7 @@ abstract class Security
   //   }
   //   return true;
   // }
+  // SELECT * FROM $entity WHERE id_entity = x AND id_entity2 = y
 
   public static function does_this_exist(string $entity, string $id): bool
   {
@@ -37,6 +38,9 @@ abstract class Security
     }
     return true;
   }
+
+
+
 
   public static function get_session_user(): object|null
   {
