@@ -9,7 +9,7 @@ use vendor\jdl\App\Model;
 // use vendor\jdl\Entity\Utilisateur;
 // use vendor\jdl\Form\CreationUtilisateurForm;
 use vendor\jdl\App\Verifier;
-//use vendor\jdl\Form\UtilisateurForm;
+use vendor\jdl\Form\UtilisateurForm;
 
 class UtilisateurController extends AbstractController
 {
@@ -97,9 +97,10 @@ class UtilisateurController extends AbstractController
      */
     public function displayConnectUtilisateur()
     {
+        $form = UtilisateurForm::formConnect(Dispatcher::generateUrl("UtilisateurController", "displayConnectUtilisateur"));
         // Si l'utilisateur ne tente pas de se connecter, on ne traite pas le formulaire
         if (!isset($_POST['submit'])) {
-            $this->render('connection.php', []);
+            $this->render('connection.php', ["form" => $form]);
             return;
         }
 
@@ -108,7 +109,7 @@ class UtilisateurController extends AbstractController
             Dispatcher::redirect();
         }
 
-        $this->render('connection.php', ["error" => $error]); 
+        $this->render('connection.php', ["form" => $form, "error" => $error]); 
     }
 
     /**

@@ -40,9 +40,9 @@ class Model extends PDO
         return self::$instance;
     }
 
-    public function readAll($entity): array|null
+    public function readAll(string $entity, string $what="*"): array|null
     {
-        $query = $this->query(' select * from ' . $entity);
+        $query = $this->query("SELECT $what FROM $entity");
         return $this->fetchQuery($query, $entity);
     }
 
