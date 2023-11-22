@@ -16,8 +16,6 @@ class TacheController extends AbstractController
         if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
-
-        $result = ;
         $priorite = Model::getInstance()->getByAttribute('priorite', 'id_priorite', $_GET['id_priorite']);
         $cdv = Model::getInstance()->getByAttribute('cycle_de_vie', 'id_cdv', $_GET['id_cdv']);
         $this->render('tache.php', ['utilisateurs' => Model::getInstance()->getByAttribute('utilisateur', 'id_utilisateur', $_SESSION['id']), 'tache' => Model::getInstance()->getById('tache', $_GET['id_tache']), 'priorite' => $priorite, 'cdv' => $cdv]);
