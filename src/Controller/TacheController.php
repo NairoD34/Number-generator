@@ -20,8 +20,10 @@ class TacheController extends AbstractController
         $cdv = Model::getInstance()->getByAttribute('cycle_de_vie', 'id_cdv', $_GET['id_cdv']);
         $this->render('tache.php', ['utilisateurs' => Model::getInstance()->getByAttribute('utilisateur', 'id_utilisateur', $_SESSION['id']), 'tache' => Model::getInstance()->getById('tache', $_GET['id_tache']), 'priorite' => $priorite, 'cdv' => $cdv]);
     }
+
     public function createTache()
     {
+        // Ceci n'est pas sécurisé **************************************************
         if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
@@ -44,12 +46,15 @@ class TacheController extends AbstractController
             $this->render('createtache.php', ['form' => TacheForm::formNewTache(Dispatcher::generateUrl("TacheController", "createTache", ["id_projet" => $_GET["id_projet"]]))]);
         }
     }
+
     private function supprTache($id)
     {
         Model::getInstance()->supprById('tache', $id);
     }
+
     public function displaySupprTache()
     {
+        // Ceci n'est pas sécurisé **************************************************
         if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
