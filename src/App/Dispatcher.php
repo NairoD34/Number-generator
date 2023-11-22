@@ -53,16 +53,4 @@ class Dispatcher
     {
         header('location: '.self::generateUrl($controllerName, $method, $query));
     }
-
-    /**
-     * Vérifie si l'user est connectéx
-     * Méthode déplacée dans : Security.php
-     */
-    // public static function is_connected()
-    // {
-    //     if (isset($_SESSION['username'])) {
-    //         return true;
-    //     }
-    //     return false;
-    // }
 }
