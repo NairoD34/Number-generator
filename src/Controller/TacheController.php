@@ -29,6 +29,11 @@ class TacheController extends AbstractController
         $this->render('tache.php', ['tache' => $tache, 'priorite' => $priorite->getLibelle(), 'cdv' => $cdv->getLibelle(), 'utilisateurs' => $user->getNom_utilisateur()]);
     }
 
+    /**
+     * si pas connecté => redirection vers l'index
+     * sinon création d'une tache en vérifiant les entrées dans le formulaire
+     * 
+     */
     public function createTache()
     {
         // Ceci n'est pas sécurisé **************************************************
@@ -58,6 +63,10 @@ class TacheController extends AbstractController
         }
     }
 
+    /**
+     * supprime la tache en récupérant l'id 
+     */
+    
     private function supprTache($id)
     {
         Model::getInstance()->supprById('tache', $id);
@@ -98,12 +107,16 @@ class TacheController extends AbstractController
         return true;
     }
 
+    /**
+     * Modifie la tache si est connecté et que la tache existe avec l'id => 
+     * la tache est modifié en mettant par defaut ses attributs.
+     */
     public function updateTache()
     {
         if (Security::does_this_exist("tache", $_GET['id_tache'])) {
             $tache = Model::getInstance()->getById("tache", $_GET['id_tache']);
         }
-        if (!Security::is_connected() || !$this->canSeeTache($tache->getId_tache(), $tache->getId_projet())) { // changer avec canSeeTache
+        if (!Security::is_connected() || !$this->canSeeTache($tache->getId_tache(), $tache->getId_projet())) {
             Dispatcher::redirect();
         }
 
@@ -114,8 +127,8 @@ class TacheController extends AbstractController
                 'id_utilisateur' => $_SESSION['id'],
                 'id_priorite' => $_POST['priorite'],
                 'id_cdv' => $_POST['cdv'],
-                // 'id_projet' => $_GET['id_projet'],
             ];
+
             Model::getInstance()->updateById('tache', $tache->getId_tache(), $datas);
             Dispatcher::redirect("ProjetController", "displayProjet", ["id_projet" => $tache->getId_projet()]);
         }
@@ -125,7 +138,6 @@ class TacheController extends AbstractController
                 'error' => empty($error) ? null : $error,
             ];
             $this->render('taches.php', $vars);
-            // $this->render('updatetache.php', ['form' => TacheForm::createForm('TacheController', 'updateTache', 'update')]);
         }
 
     }
