@@ -91,7 +91,6 @@ class UtilisateurController extends AbstractController
             ];
             if ($this->verifRegister()) {
                 $this->createUtilisateur($datas);
-                ParticipeController::addUtilisateurToProjet();
 
                 Dispatcher::redirect('ProjetController', 'displayProjets');
                 // 'Votre compte à bien été créé';

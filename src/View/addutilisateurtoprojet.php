@@ -1,5 +1,10 @@
 <?php
 
+use vendor\jdl\App\Dispatcher;
+
 echo "<h1>Ajouter une personne au projet</h1>";
 echo $form;
-//echo $error;
+if (!empty($error)) {
+
+    echo $error;
+}
