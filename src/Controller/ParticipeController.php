@@ -19,20 +19,24 @@ class ParticipeController extends AbstractController
 
 
         if (isset($_POST['submit'])) {
-            $id_user = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username'])[0];
-            var_dump($id_user);
-            $datas = [
-                'id_utilisateur' => $id_user->getId_utilisateur(),
-                'id_projet' => $_GET['id_projet']
 
-            ];
+            if (!is_null(Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']))) {
+                $id_user = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username'])[0];
+                $datas = [
+                    'id_utilisateur' => $id_user->getId_utilisateur(),
+                    'id_projet' => $_GET['id_projet']
 
-            Model::getInstance()->save('participe', $datas);
+                ];
 
-            Dispatcher::redirect('ProjetController', 'displayProjet', ['id_projet' =>  $_GET['id_projet']]);
+                Model::getInstance()->save('participe', $datas);
+
+                Dispatcher::redirect('ProjetController', 'displayProjet', ['id_projet' =>  $_GET['id_projet']]);
+            }
         } else {
             $users = Model::getInstance()->readAll('utilisateur', 'nom_utilisateur');
-            $this->render('addutilisateurtoprojet.php', ['form' => ParticipeForm::getForm(Dispatcher::generateUrl("ParticipeController", "addUtilisateurToProjet", ['id_projet' => $_GET['id_projet']]), $users)]);
+            $this->render('addutilisateurtoprojet.php', [
+                'form' => ParticipeForm::getForm(Dispatcher::generateUrl("ParticipeController", "addUtilisateurToProjet", ['id_projet' => $_GET['id_projet']]), $users), 'error' => "Nom d'utilisateur non reconnu veuillez réessayer ou le créer en cliquant sur ce bouton <a href =" . Dispatcher::generateUrl('UtilisateurController', 'createAndAddUtilisateur') . "<button>Créer l'utilisateur</button></a>"
+            ]);
         }
     }
 }

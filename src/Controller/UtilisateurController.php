@@ -10,6 +10,7 @@ use vendor\jdl\App\Model;
 // use vendor\jdl\Form\CreationUtilisateurForm;
 use vendor\jdl\App\Verifier;
 use vendor\jdl\Form\UtilisateurForm;
+use vendor\jdl\Controller\ParticipeController;
 
 class UtilisateurController extends AbstractController
 {
@@ -79,6 +80,25 @@ class UtilisateurController extends AbstractController
     private function createUtilisateur($datas)
     {
         Model::getInstance()->save('utilisateur', $datas);
+    }
+    private function displayCreateAndAddUtilisateur($datas)
+    {
+        if (isset($_POST['submit']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['verif'])) {
+            $datas = [
+                'nom_utilisateur' => $_POST['username'],
+                'mdp' => password_hash($_POST['password'], PASSWORD_DEFAULT)
+
+            ];
+            if ($this->verifRegister()) {
+                $this->createUtilisateur($datas);
+                ParticipeController::addUtilisateurToProjet();
+
+                Dispatcher::redirect('ProjetController', 'displayProjets');
+                // 'Votre compte à bien été créé';
+                return true;
+            }
+        }
+        $this->render('registrationAdd.php', []);
     }
 
     /**
