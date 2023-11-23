@@ -129,7 +129,6 @@ class Model extends PDO
     // public function supprAll($entity, $id)
     // {
     //     $sql = ' delete from ' .$entity . 'where id_'. $entity . '='. $id;
-    //     $sql = ' delete * from ' .$entity . 'where id_'. $entity . '='. $id;
 
     //     $preparedSql = $this->prepare($sql);
     //     $preparedSql->execute();

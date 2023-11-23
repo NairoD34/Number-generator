@@ -85,7 +85,7 @@ class ProjetController extends AbstractController
         return false;
     }
 
-    public function updateProjet()
+    public function updateProjet() // SECURITER
     {
         if (!Security::is_connected()){
             Dispatcher::redirect();
@@ -119,7 +119,7 @@ class ProjetController extends AbstractController
         if (isset($_GET['id_projet'])){
             $this->deleteProjet($_GET['id_projet']);
             // Dispatcher::redirect('projetController', 'displayProjets');
-            Dispatcher::redirect('index.php');
+            Dispatcher::redirect('ProjetController', 'displayProjets');
         }
     }
     
