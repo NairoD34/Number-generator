@@ -87,20 +87,19 @@ class ProjetController extends AbstractController
 
     public function updateProjet() // SECURITER
     {
-        if (!Security::is_connected()){
+        if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
 
-        if (isset($_POST["submit"])){
+        if (isset($_POST["submit"])) {
             $datas = [
-                "nom_projet"=> $_POST["nom_projet"],
+                "nom_projet" => $_POST["nom_projet"],
             ];
             Model::getInstance()->updateById("projet", $_POST['id_projet'], $datas);
-            Dispatcher::redirect();
-        }
-        else {
+            Dispatcher::redirect('ProjetController', 'displayProjets');
+        } else {
             $vars = [
-                'form'=> ProjetForm::createForm(Dispatcher::generateUrl('projetController', 'updateProjet'),'update', $_GET["id_projet"]),
+                'form' => ProjetForm::createForm(Dispatcher::generateUrl('projetController', 'updateProjet'), 'update', $_GET["id_projet"]),
             ];
             $this->render("updateprojet.php", $vars);
         }
@@ -116,13 +115,12 @@ class ProjetController extends AbstractController
         if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
-        if (isset($_GET['id_projet'])){
+        if (isset($_GET['id_projet'])) {
             $this->deleteProjet($_GET['id_projet']);
             // Dispatcher::redirect('projetController', 'displayProjets');
             Dispatcher::redirect('ProjetController', 'displayProjets');
         }
     }
-    
 }
 
 
