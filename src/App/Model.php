@@ -140,10 +140,14 @@ class Model extends PDO
         $preparedRequest->execute($preparedDatas);
     }
 
-    public function getByAttribute($entity, $attribute, $value, $comp = '='): array
+    public function getByAttribute($entity, $attribute, $value, $comp = '=', string $orderBy = ""): array
     {
         // SELECT * FROM table WHERE attribute = value
-        $query = $this->query("SELECT * FROM $entity WHERE $attribute $comp '$value'");
+        $sql = "SELECT * FROM $entity WHERE $attribute $comp '$value'";
+        if ($orderBy !== "") {
+            $sql .= " ORDER BY $orderBy";
+        }
+        $query = $this->query($sql);
         return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . ucfirst($entity));
     }
 
