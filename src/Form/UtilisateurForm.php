@@ -2,8 +2,6 @@
 
 namespace vendor\jdl\Form;
 
-use vendor\jdl\App\Model;
-
 class UtilisateurForm
 {
     public static function formSubscribe($action)
@@ -13,7 +11,7 @@ class UtilisateurForm
                 <input id='username' type='text' name='username'>
                 <label for='password'>Votre Mot de Passe</label>
                 <input id='password' type='password' name='password'>
-                <label for='verif'>Vérifier votre Mot de Passe</label>
+                <label for='verif'>Vérifiez votre Mot de Passe</label>
                 <input id='verif' type='password' name='verif'>
                 <button name='submit' value='submit'>submit</button>
             </form>";

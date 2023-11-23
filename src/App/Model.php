@@ -40,15 +40,20 @@ class Model extends PDO
         return self::$instance;
     }
 
-    public function readAll($entity): array|null
+    public function readAll(string $entity, string $what = "*"): array|null
     {
-        $query = $this->query(' select * from ' . $entity);
+        $query = $this->query("SELECT $what FROM $entity");
         return $this->fetchQuery($query, $entity);
     }
 
     public function getById($entity, $id): object|null
     {
         $query = $this->query('select * from ' . $entity . ' where id_' . $entity . '=' . $id);
+        return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . $entity)[0];
+    }
+    public function getCdvById($entity, $id): object|null
+    {
+        $query = $this->query('select * from ' . $entity . ' where id_cdv=' . $id);
         return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . $entity)[0];
     }
 
@@ -63,6 +68,26 @@ class Model extends PDO
     public function getByFk(string $entity, string $id, string $foreign_entity): array
     {
         $query = $this->query('select * from ' . $entity . ' where id_' . $foreign_entity . '=' . $id);
+        return $this->fetchQuery($query, $entity);
+    }
+
+    /**
+     * retourne un tableau d'objets qui correspond aux associations entité / clé passées en argument
+     * les ids mentionnés: clés primaires et étrangères
+     * écrire le deuxième argument comme suit : ["entity" => "id", "entity2" => "id2"]
+     */
+    public function getByIds(string $entity, array $entitiesAndIds): array|null
+    {
+        $sql = "SELECT * FROM $entity WHERE ";
+        $count = count($entitiesAndIds) - 1;
+        foreach ($entitiesAndIds as $entityKey => $id) {
+            $sql .= "id_$entityKey = $id ";
+            if ($count > 0) {
+                $sql .= "AND ";
+                $count--;
+            }
+        }
+        $query = $this->query($sql);
         return $this->fetchQuery($query, $entity);
     }
 
@@ -134,5 +159,40 @@ class Model extends PDO
         // SELECT * FROM table WHERE attribute = value
         $query = $this->query("SELECT * FROM $entity WHERE $attribute $comp '$value'");
         return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . ucfirst($entity));
+    }
+
+    public function getByAttributes(string $entity, array $attributeAndValues): array|null
+    {
+        $sql = "SELECT * FROM $entity WHERE ";
+        $count = count($attributeAndValues) - 1;
+        foreach ($attributeAndValues as $AttributeKey => $id) {
+            $sql .= "$AttributeKey = $id ";
+            if ($count > 0) {
+                $sql .= "AND ";
+                $count--;
+            }
+        }
+        $query = $this->query($sql);
+        return $this->fetchQuery($query, $entity);
+    }
+    // Pour récupérer spécifiquement tous les projets rattachés à un utilisateur (admin ou pas)
+    public function getProjetsByIdUtilisateur($id_utilisateur)
+    {
+        // C'est de la merde, réécrire
+        $sql = "SELECT p.id_projet, p.nom_projet, p.id_utilisateur
+            FROM projet p 
+            LEFT JOIN participe p2
+            ON p.id_projet = p2.id_projet
+            WHERE p.id_utilisateur = $id_utilisateur
+            OR p2.id_utilisateur = $id_utilisateur
+            GROUP BY p.id_projet";
+        $query = $this->query($sql);
+        return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . "projet");
+    }
+    public function getUtilisateurByProjet($id)
+    {
+        $sql = "SELECT * FROM utilisateur u join participe p on u.id_utilisateur = p.id_utilisateur where p.id_projet = $id";
+        $query = $this->query($sql);
+        return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . "utilisateur");
     }
 }

@@ -1,15 +1,17 @@
 <?php
+
 namespace vendor\jdl\App;
 
 // Vérifie des droits utilisateurs
 
-abstract class Security {
+abstract class Security
+{
   public static function is_connected()
   {
-      if (isset($_SESSION['username'])) {
-          return true;
-      }
-      return false;
+    if (isset($_SESSION['username'])) {
+      return true;
+    }
+    return false;
   }
 
   // public static function utilisateur_exists(string $id_utilisateur):bool
@@ -19,12 +21,29 @@ abstract class Security {
   //   }
   //   return true;
   // }
+  // SELECT * FROM $entity WHERE id_entity = x AND id_entity2 = y
 
-  public static function does_this_exist(string $entity, string $id):bool
+  public static function does_this_exist(string $entity, string $id): bool
   {
-    if (empty(Model::getInstance()->getByAttribute($entity, 'id_'.$entity, $id))){
+    if (empty(Model::getInstance()->getByAttribute($entity, 'id_' . $entity, $id))) {
       return false;
     }
     return true;
+  }
+
+
+
+
+
+
+  public static function get_session_user(): object|null
+  {
+    if (!self::is_connected()) {
+      return null;
+    }
+    if (empty($user = Model::getInstance()->getByAttribute("utilisateur", "nom_utilisateur", $_SESSION['username'])[0])) {
+      return null;
+    }
+    return $user;
   }
 }

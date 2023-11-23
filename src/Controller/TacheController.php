@@ -12,18 +12,25 @@ class TacheController extends AbstractController
 {
     public function displayTache()
     {
-        if (!Security::is_connected()) {
+        // Ceci n'est pas sécurisé ***************************************************
+        if (!Security::is_connected() || $this->canSeeTache($_GET['id_tache'], $_GET['id_projet']) === false) {
             Dispatcher::redirect();
         }
 
-        $result = Model::getInstance()->getById('tache', $_GET['id_tache']);
-        $user = Model::getInstance()->getByAttribute('utilisateur', 'id_utilisateur', $_GET['id_utilisateur']);
-        $priorite = Model::getInstance()->getByAttribute('priorite', 'id_priorite', $_GET['id_priorite']);
-        $cdv = Model::getInstance()->getByAttribute('cycle_de_vie', 'id_cdv', $_GET['id_cdv']);
-        $this->render('tache.php', ['utilisateurs' => $user, 'tache' => $result, 'priorite' => $priorite, 'cdv' => $cdv]);
+        $tache = Model::getInstance()->getById('tache', $_GET['id_tache']);
+        if ($tache->getId_projet() != $_GET['id_projet']) {
+            Dispatcher::redirect();
+        }
+        $priorite = Model::getInstance()->getById('priorite', $tache->getId_priorite());
+        $cdv = Model::getInstance()->getCdvById('cycle_de_vie', $tache->getId_cdv());
+        $user = Model::getInstance()->getById('utilisateur', $tache->getId_utilisateur());
+
+        $this->render('tache.php', ['tache' => $tache, 'priorite' => $priorite->getLibelle(), 'cdv' => $cdv->getLibelle(), 'utilisateurs' => $user->getNom_utilisateur()]);
     }
+
     public function createTache()
     {
+        // Ceci n'est pas sécurisé **************************************************
         if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
@@ -46,12 +53,15 @@ class TacheController extends AbstractController
             $this->render('createtache.php', ['form' => TacheForm::formNewTache(Dispatcher::generateUrl("TacheController", "createTache", ["id_projet" => $_GET["id_projet"]]))]);
         }
     }
+
     private function supprTache($id)
     {
         Model::getInstance()->supprById('tache', $id);
     }
+
     public function displaySupprTache()
     {
+        // Ceci n'est pas sécurisé **************************************************
         if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
@@ -61,31 +71,27 @@ class TacheController extends AbstractController
             Dispatcher::redirect('projetController', 'displayProjet', ["id_projet" => $_GET["id_projet"]]);
         }
     }
-
-    public function updateTache()
+    // ça marche pas il faut la changer
+    private function canSeeTache($id_tache, $id_projet)
     {
-        if (!Security::is_connected()) {
-            Dispatcher::redirect();
+        if (!Security::does_this_exist("tache", $id_tache)) {
+            return false;
         }
-        if (isset($_POST["submit"])) {
-            $data = [
-                'titre_tache' => $_POST['titre_tache'],
-                'description' => $_POST['description'],
-                'id_utilisateur' => $_SESSION['id'],
-                'id_priorite' => $_POST['priorite'],
-                'id_cdv' => 1,
-                // 'id_projet' => $_GET['id_projet'],
-            ];
-            Model::getInstance()->updateById('tache',$_POST['id_tache'], $data);
-            Dispatcher::redirect('');
-        }
-        else{
-            $vars = [
-                // 'form'=> TacheForm::createForm('?controller=TacheController&method=updateTache','update', $_GET["id_tache"]),
-                'form'=> TacheForm::createForm(Dispatcher::generateUrl('TacheController' , 'updateTache') ,'update', $_GET["id_tache"]),
 
-            ]; 
-            $this->render("taches.php", $vars);
+
+        if (is_null($user = Security::get_session_user())) {
+            return false;
         }
+        $id_user = $user->getId_utilisateur();
+
+        $associations = Model::getInstance()->getByIds("participe", ["utilisateur" => $id_user, "projet" => $id_projet]);
+        $admin = Model::getInstance()->getByIds("projet", ["utilisateur" => $id_user, "projet" => $id_projet]);
+        if (empty($associations) && empty($admin)) {
+            return false;
+        }
+        if ($associations === null && $admin[0]->getId_utilisateur() != $_SESSION['id']) {
+            return false;
+        }
+        return true;
     }
 }

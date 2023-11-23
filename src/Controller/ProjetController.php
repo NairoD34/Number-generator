@@ -17,8 +17,11 @@ class ProjetController extends AbstractController
         if (!Security::is_connected()) { // si connecté affiche les projets 
             Dispatcher::redirect();  // redirection vers l'index si pas connecté
         }
-        $results = Model::getInstance()->readAll('projet');
-        $this->render('projets.php', ['projets' => $results]);
+        $results = Model::getInstance()->getProjetsByIdUtilisateur(Security::get_session_user()->getId_utilisateur());
+        $vars = [
+            'projets' => $results,
+        ];
+        $this->render('projets.php', $vars);
     }
 
     public function createProjet()
@@ -38,6 +41,7 @@ class ProjetController extends AbstractController
                 'nom_projet' => $_POST['nom_projet'],
                 'id_utilisateur' => $_SESSION['id'],
             ];
+
             Model::getInstance()->save('projet', $datas);
             $this->displayProjets();
             return;
@@ -47,12 +51,30 @@ class ProjetController extends AbstractController
 
     public function displayProjet()
     {
-        if (!Security::is_connected()) {
+        if (!Security::is_connected() || !$this->canSeeProjet($_GET['id_projet'])) {
             Dispatcher::redirect();
         }
         $projet = Model::getInstance()->getById('projet', $_GET['id_projet']);
         $taches = Model::getInstance()->getByAttribute('tache', 'id_projet', $_GET['id_projet']);
-        $this->render('projet.php', ['taches' => $taches, 'projet' => $projet]);
+        $users = Model::getInstance()->getUtilisateurByProjet($_GET['id_projet']);
+        $this->render('projet.php', ['taches' => $taches, 'projet' => $projet, 'isAdmin' => ($projet->getId_utilisateur() === $_SESSION['id']), 'users' => $users]);
+    }
+
+    private function canSeeProjet($id_projet): bool
+    {
+        if (!Security::does_this_exist("projet", $id_projet)) {
+            return false;
+        }
+        if (is_null($user = Security::get_session_user())) {
+            return false;
+        }
+        $id_user = $user->getId_utilisateur();
+        $associations = Model::getInstance()->getByIds("participe", ["utilisateur" => $id_user, "projet" => $id_projet]);
+        $admin = Model::getInstance()->getByIds("projet", ["utilisateur" => $id_user, "projet" => $id_projet]);
+        if (empty($associations) && empty($admin)) {
+            return false;
+        }
+        return true;
     }
 
     private function isProjetNameInvalid(string $input): string|false

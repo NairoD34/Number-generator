@@ -2,15 +2,23 @@
 
 use vendor\jdl\App\Dispatcher;
 
-echo '<a href=' . Dispatcher::generateUrl('ParticipeController', 'addUtilisateurToProjet') . '&id=' . $projet->getId_projet() . '>Ajouter un participant</a><br>';
+echo "<h1>" . $projet->getNom_projet() . "</h1>";
+
+if ($isAdmin) {
+    echo "<p>(ADMIN)</p>";
+    echo '<a href=' . Dispatcher::generateUrl('ParticipeController', 'addUtilisateurToProjet') . '&id_projet=' . $projet->getId_projet() . '>Ajouter un participant</a><br>';
+}
+
 echo '<a href=' . Dispatcher::generateUrl('TacheController', 'createTache') . '&id_projet=' . $projet->getId_projet() . '>Créer une nouvelle tâche</a><br>';
-
-echo "Nom du projet : " . $projet->getNom_projet() . "<br>";
-echo '<a href=' . Dispatcher::generateUrl('projetController', 'updateProjet', ['id_projet' => $projet->getId_projet()]) . '><button>Modifier</button></a>';
-echo '<a href="' . Dispatcher::generateUrl('projetController', 'displaySupprProjet', ['id_projet' => $projet->getId_projet()]) . '"><button>Supprimer</button></a>';
-
-echo '<br>';
-
+if ($isAdmin) {
+    echo '<a style="color: red;" href=' . Dispatcher::generateUrl('ProjetController', 'deleteProjet') . '&id_projet=' . $projet->getId_projet() . '>Supprimer le projet</a><br>';
+}
+echo "<ul>";
+foreach ($users as $user) {
+    echo '<li>' . $user->getNom_utilisateur() . '</li>';
+}
+echo "</ul>";
+echo "<ul>";
 foreach ($taches as $tache) {
     if ($projet->getId_utilisateur() === $_SESSION['id']) {
         echo '<br><li><a href=' . Dispatcher::generateUrl("TacheController", "displayTache", ['id_projet' => $projet->getId_projet(), "id_tache" => $tache->getId_tache(), "id_utilisateur" => $tache->getId_utilisateur(), "id_priorite" => $tache->getId_priorite(), "id_cdv" => $tache->getId_cdv()]) . '>' . $tache->getTitre_tache() . '</a></li>
@@ -19,3 +27,4 @@ foreach ($taches as $tache) {
 
     }
 }
+echo "</ul>";
