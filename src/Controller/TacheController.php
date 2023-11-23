@@ -94,4 +94,33 @@ class TacheController extends AbstractController
         }
         return true;
     }
+
+    public function updateTache()
+    {
+        if (!Security::is_connected()) { // changer avec canSeeTache
+            Dispatcher::redirect();
+        }
+
+        if (isset($_POST['submit'])){
+            $datas = [
+                'titre_tache' => $_POST['titre_tache'],
+                'description' => $_POST['description'],
+                'id_utilisateur' => $_SESSION['id'],
+                'id_priorite' => $_POST['priorite'],
+                'id_cdv' => 1,
+                // 'id_projet' => $_GET['id_projet'],
+
+            ];
+            Model::getInstance()->updateById('tache', $_POST['id_tache'], $datas);
+            Dispatcher::redirect();
+        }
+        else {
+            $vars = [
+                'form' => TacheForm::createForm(Dispatcher::generateUrl('TacheController','updateTache'), 'update', $_GET['id_tache'])
+            ];
+            $this->render('taches.php', $vars);
+            // $this->render('updatetache.php', ['form' => TacheForm::createForm('TacheController', 'updateTache', 'update')]);
+        }
+
+    }
 }

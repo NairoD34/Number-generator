@@ -126,6 +126,14 @@ class Model extends PDO
         $preparedSql->execute();
     }
 
+    // public function supprAll($entity, $id)
+    // {
+    //     $sql = ' delete from ' .$entity . 'where id_'. $entity . '='. $id;
+
+    //     $preparedSql = $this->prepare($sql);
+    //     $preparedSql->execute();
+    // }
+
     public function updateById($entity, $id,  $datas): void
     {
         $sql = 'UPDATE ' . $entity . ' SET ';
@@ -140,7 +148,7 @@ class Model extends PDO
             }
             $i++;
         }
-        $sql = $sql . " WHERE id = '$id'";
+        $sql = $sql . " WHERE id_". $entity ." = '$id'";
         $preparedRequest = $this->prepare($sql);
         $preparedRequest->execute($preparedDatas);
     }
