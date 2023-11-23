@@ -165,4 +165,19 @@ class Model extends PDO
         $query = $this->query($sql);
         return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . "projet");
     }
+
+    public function getTacheWithCdvAndPriorite($propriety, $comparedValue, $comp = "=")
+    {
+        $sql = "SELECT id_tache, titre_tache, description, id_utilisateur, t.id_priorite, t.id_cdv, id_projet, c.libelle as cdv, p.libelle as priorite
+            FROM tache t
+            LEFT JOIN cycle_de_vie c
+            ON t.id_cdv = c.id_cdv
+            LEFT JOIN priorite p 
+            ON p.id_priorite = t.id_priorite
+            WHERE $propriety $comp $comparedValue
+            ORDER BY t.id_priorite";
+        $query = $this->query($sql);
+        return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . "tache");
+
+    }
 }

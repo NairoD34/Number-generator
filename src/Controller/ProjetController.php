@@ -54,7 +54,7 @@ class ProjetController extends AbstractController
             Dispatcher::redirect();
         }
         $projet = Model::getInstance()->getById('projet', $_GET['id_projet']);
-        $taches = Model::getInstance()->getByAttribute('tache', 'id_projet', $_GET['id_projet'], "=", "id_priorite");
+        $taches = Model::getInstance()->getTacheWithCdvAndPriorite("id_projet", $_GET['id_projet']);
         
         $this->render('projet.php', [ 'taches' => $taches, 'projet' => $projet, 'isAdmin' => ($projet->getId_utilisateur() === $_SESSION['id']) ]);
     }

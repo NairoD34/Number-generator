@@ -11,6 +11,8 @@ class Tache
     private int $id_priorite;
     private int $id_cdv;
     private int $id_projet;
+    private ?string $cdv;
+    private ?string $priorite;
 
     /**
      * Get the value of id_tache
@@ -151,4 +153,21 @@ class Tache
 
         return $this;
     }
+
+    /**
+     * Get the value of cdv
+     */ 
+    public function getCdv()
+    {
+        return $this->cdv;
+    }
+
+    /**
+     * Get the value of priorite
+     */ 
+    public function getPriorite()
+    {
+        return $this->priorite;
+    }
+
 }
