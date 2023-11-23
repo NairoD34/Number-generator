@@ -22,18 +22,27 @@ class ParticipeController extends AbstractController
 
             if (!empty(Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']))) {
                 $id_user = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username'])[0];
-                $datas = [
-                    'id_utilisateur' => $id_user->getId_utilisateur(),
-                    'id_projet' => $_GET['id_projet']
+                if (!empty(Model::getInstance()->getProjetsByIdUtilisateur($id_user->getId_utilisateur()))) {
+                    $users = Model::getInstance()->readAll('utilisateur', 'nom_utilisateur');
+                    $error = "Cet utilisateur participe déjà à votre projet";
+                    $this->render('addUtilisateurToProjet.php', [
+                        'form' => ParticipeForm::getForm(Dispatcher::generateUrl("ParticipeController", "addUtilisateurToProjet", ['id_projet' => $_GET['id_projet']]), $users),
+                        'error' => $error
+                    ]);
+                } else {
+                    $datas = [
+                        'id_utilisateur' => $id_user->getId_utilisateur(),
+                        'id_projet' => $_GET['id_projet']
 
-                ];
+                    ];
 
-                Model::getInstance()->save('participe', $datas);
+                    Model::getInstance()->save('participe', $datas);
 
-                Dispatcher::redirect('ProjetController', 'displayProjet', ['id_projet' =>  $_GET['id_projet']]);
+                    Dispatcher::redirect('ProjetController', 'displayProjet', ['id_projet' =>  $_GET['id_projet']]);
+                }
             } else {
                 $users = Model::getInstance()->readAll('utilisateur', 'nom_utilisateur');
-                $error = "Nom d'utilisateur non reconnu veuillez réessayer ou le créer en cliquant sur ce bouton <a href =" . Dispatcher::generateUrl('UtilisateurController', 'createAndAddUtilisateur') . "><button>Créer l'utilisateur</button></a>";
+                $error = "Nom d'utilisateur non reconnu veuillez réessayer ou le créer en cliquant sur ce bouton <a href =" . Dispatcher::generateUrl('UtilisateurController', 'displayCreateUtilisateurAndAddToProjet', ['id_projet' => $_GET['id_projet']]) . "><button>Créer l'utilisateur</button></a>";
                 $this->render('addUtilisateurToProjet.php', [
                     'form' => ParticipeForm::getForm(Dispatcher::generateUrl("ParticipeController", "addUtilisateurToProjet", ['id_projet' => $_GET['id_projet']]), $users),
                     'error' => $error
