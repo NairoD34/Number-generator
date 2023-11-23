@@ -6,6 +6,7 @@ use vendor\jdl\App\Model;
 use vendor\jdl\App\AbstractController;
 use vendor\jdl\App\Dispatcher;
 use vendor\jdl\App\Security;
+use vendor\jdl\App\Verifier;
 use vendor\jdl\Form\TacheForm;
 
 class TacheController extends AbstractController
@@ -35,22 +36,25 @@ class TacheController extends AbstractController
             Dispatcher::redirect();
         }
 
-        if (isset($_POST['submit'])) {
+        if (isset($_POST['submit']) && !($error = $this->validatePostTacheForm())) {
             $datas = [
                 'titre_tache' => $_POST['titre_tache'],
                 'description' => $_POST['description'],
                 'id_utilisateur' => $_SESSION['id'],
                 'id_priorite' => $_POST['priorite'],
-                'id_cdv' => 1,
+                'id_cdv' => $_POST['cdv'],
                 'id_projet' => $_GET['id_projet'],
 
             ];
 
             Model::getInstance()->save('tache', $datas);
 
-            Dispatcher::redirect('ProjetController', 'displayProjet', ['id_projet' =>  $_GET['id_projet']]);
+            Dispatcher::redirect('ProjetController', 'displayProjet', ['id_projet' => $_GET['id_projet']]);
         } else {
-            $this->render('createtache.php', ['form' => TacheForm::formNewTache(Dispatcher::generateUrl("TacheController", "createTache", ["id_projet" => $_GET["id_projet"]]))]);
+            $this->render('createtache.php', [
+                'form' => TacheForm::formNewTache(Dispatcher::generateUrl("TacheController", "createTache", ["id_projet" => $_GET["id_projet"]])),
+                'error' => empty($error) ? null : $error,
+            ]);
         }
     }
 
@@ -97,30 +101,51 @@ class TacheController extends AbstractController
 
     public function updateTache()
     {
-        if (!Security::is_connected() || !$this->canSeeTache($_GET['id_tache'], $_GET['id_projet'])) { // changer avec canSeeTache
+        if (Security::does_this_exist("tache", $_GET['id_tache'])) {
+            $tache = Model::getInstance()->getById("tache", $_GET['id_tache']);
+        }
+        if (!Security::is_connected() || !$this->canSeeTache($tache->getId_tache(), $tache->getId_projet())) { // changer avec canSeeTache
             Dispatcher::redirect();
         }
 
-        if (isset($_POST['submit'])){
+        if (isset($_POST['submit']) && !($error = $this->validatePostTacheForm())){
             $datas = [
                 'titre_tache' => $_POST['titre_tache'],
                 'description' => $_POST['description'],
                 'id_utilisateur' => $_SESSION['id'],
                 'id_priorite' => $_POST['priorite'],
-                'id_cdv' => 1,
+                'id_cdv' => $_POST['cdv'],
                 // 'id_projet' => $_GET['id_projet'],
-
             ];
-            Model::getInstance()->updateById('tache', $_POST['id_tache'], $datas);
+            Model::getInstance()->updateById('tache', $tache->getId_tache(), $datas);
             Dispatcher::redirect();
         }
         else {
             $vars = [
-                'form' => TacheForm::createForm(Dispatcher::generateUrl('TacheController','updateTache'), 'update', $_GET['id_tache'])
+                'form' => TacheForm::createForm(Dispatcher::generateUrl('TacheController','updateTache', ["id_tache" => $_GET['id_tache']]), 'update', $_GET['id_tache']),
+                'error' => empty($error) ? null : $error,
             ];
             $this->render('taches.php', $vars);
             // $this->render('updatetache.php', ['form' => TacheForm::createForm('TacheController', 'updateTache', 'update')]);
         }
 
+    }
+
+    // Retourne une erreur si y'a un problème, autrement retourne false si y'en a pas
+    private function validatePostTacheForm():string|false 
+    {
+        if (Verifier::hasHTMLShit($_POST['titre_tache']) || !Verifier::validateWord($_POST['titre_tache'], " &_',-")) {
+            return "Titre de tâche invalide (caractères interdits)";
+        }
+        if (Verifier::hasHTMLShit($_POST['description']) || !Verifier::validateWord($_POST['description'], " &_',-")) {
+            return "Description de tâche invalide (caractères interdits)";
+        }
+        if (Verifier::hasHTMLShit($_POST['priorite']) || !Verifier::isNumber($_POST['priorite'])) {
+            return "Valeur de priorité invalide (caractères interdits)";
+        }
+        if (Verifier::hasHTMLShit($_POST['cdv']) || !Verifier::isNumber($_POST['cdv'])) {
+            return "Valeur de cycle de vie invalide (caractères interdits)";
+        }
+        return false;
     }
 }
