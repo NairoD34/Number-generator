@@ -20,7 +20,7 @@ class ParticipeController extends AbstractController
 
         if (isset($_POST['submit'])) {
 
-            if (!is_null(Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']))) {
+            if (!empty(Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']))) {
                 $id_user = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username'])[0];
                 $datas = [
                     'id_utilisateur' => $id_user->getId_utilisateur(),
@@ -31,6 +31,8 @@ class ParticipeController extends AbstractController
                 Model::getInstance()->save('participe', $datas);
 
                 Dispatcher::redirect('ProjetController', 'displayProjet', ['id_projet' =>  $_GET['id_projet']]);
+            } else {
+                Dispatcher::redirect('participeController', 'addUtilisateurToProjet', ['id_projet' =>  $_GET['id_projet']]);
             }
         } else {
             $users = Model::getInstance()->readAll('utilisateur', 'nom_utilisateur');
