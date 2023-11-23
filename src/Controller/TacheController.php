@@ -97,7 +97,7 @@ class TacheController extends AbstractController
 
     public function updateTache()
     {
-        if (!Security::is_connected()) { // changer avec canSeeTache
+        if (!Security::is_connected() || !$this->canSeeTache($_GET['id_tache'], $_GET['id_projet'])) { // changer avec canSeeTache
             Dispatcher::redirect();
         }
 
