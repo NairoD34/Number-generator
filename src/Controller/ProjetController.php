@@ -12,6 +12,11 @@ use vendor\jdl\Controller\TacheController;
 
 class ProjetController extends AbstractController
 {
+    /**
+     * si connecté ?
+     * affiche la liste des projets associés à l'utilisateur 
+     * sinon redirige vers l'index
+     */
     public function displayProjets()
     {
         if (!Security::is_connected()) { // si connecté affiche les projets 
@@ -24,6 +29,10 @@ class ProjetController extends AbstractController
         $this->render('projets.php', $vars);
     }
 
+    /**
+     * si pas connecté redirection
+     * creation d'un projet avec comme admin l'id de la session qui est connecté 
+     */
     public function createProjet()
     {
         if (!Security::is_connected()) {
@@ -85,6 +94,10 @@ class ProjetController extends AbstractController
         return false;
     }
 
+    /**
+     * pas connecté ? redirection vers l'index
+     * modification de nom du projet en récupérant l'id du projet si on est l'admin du projet
+     */
     public function updateProjet() // SECURITER
     {
         if (!Security::is_connected()) {
@@ -105,6 +118,11 @@ class ProjetController extends AbstractController
         }
     }
 
+    /**
+     * delete le projet 
+     * grace au delete cascade qui est mis depuis phpMyAdmin 
+     * et donc supprime les taches associées au projet
+     */
     public function deleteProjet($id)
     {
         Model::getInstance()->supprById('projet', $id);
@@ -117,11 +135,8 @@ class ProjetController extends AbstractController
         }
         if (isset($_GET['id_projet'])) {
             $this->deleteProjet($_GET['id_projet']);
-            // Dispatcher::redirect('projetController', 'displayProjets');
             Dispatcher::redirect('ProjetController', 'displayProjets');
         }
     }
 }
 
-
-// revoir la sécurité de modifier et supprimer pour les projets et les taches 
