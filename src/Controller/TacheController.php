@@ -61,4 +61,31 @@ class TacheController extends AbstractController
             Dispatcher::redirect('projetController', 'displayProjet', ["id_projet" => $_GET["id_projet"]]);
         }
     }
+
+    public function updateTache()
+    {
+        if (!Security::is_connected()) {
+            Dispatcher::redirect();
+        }
+        if (isset($_POST["submit"])) {
+            $data = [
+                'titre_tache' => $_POST['titre_tache'],
+                'description' => $_POST['description'],
+                'id_utilisateur' => $_SESSION['id'],
+                'id_priorite' => $_POST['priorite'],
+                'id_cdv' => 1,
+                // 'id_projet' => $_GET['id_projet'],
+            ];
+            Model::getInstance()->updateById('tache',$_POST['id_tache'], $data);
+            Dispatcher::redirect('');
+        }
+        else{
+            $vars = [
+                // 'form'=> TacheForm::createForm('?controller=TacheController&method=updateTache','update', $_GET["id_tache"]),
+                'form'=> TacheForm::createForm(Dispatcher::generateUrl('TacheController' , 'updateTache') ,'update', $_GET["id_tache"]),
+
+            ]; 
+            $this->render("taches.php", $vars);
+        }
+    }
 }

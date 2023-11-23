@@ -62,4 +62,46 @@ class ProjetController extends AbstractController
         }
         return false;
     }
+
+    public function updateProjet()
+    {
+        if (!Security::is_connected()){
+            Dispatcher::redirect();
+        }
+
+        if (isset($_POST["submit"])){
+            $datas = [
+                "nom_projet"=> $_POST["nom_projet"],
+            ];
+            Model::getInstance()->updateById("projet", $_POST['id_projet'], $datas);
+            Dispatcher::redirect();
+        }
+        else {
+            $vars = [
+                'form'=> ProjetForm::createForm(Dispatcher::generateUrl('projetController', 'updateProjet'),'update', $_GET["id_projet"]),
+            ];
+            $this->render("updateprojet.php", $vars);
+        }
+    }
+
+    public function deleteProjet($id)
+    {
+        Model::getInstance()->supprById('projet', $id);
+    }
+
+    public function displaySupprProjet()
+    {
+        if (!Security::is_connected()) {
+            Dispatcher::redirect();
+        }
+        if (isset($_GET['id_projet'])){
+            $this->deleteProjet($_GET['id_projet']);
+            // Dispatcher::redirect('projetController', 'displayProjets');
+            Dispatcher::redirect('index.php');
+        }
+    }
+    
 }
+
+
+// revoir la sécurité de modifier et supprimer pour les projets et les taches 

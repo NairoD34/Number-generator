@@ -6,11 +6,11 @@ use vendor\jdl\App\Model;
 
 class ProjetForm
 {
-    public static function createForm($action, $mode = 'create', $id = 0)
+    public static function createForm($action, $mode = 'create', $id_projet = 0)
     {
         if ($mode === 'update') {
-            $projet = Model::getInstance()->getById('projet', $id);
-            return self::formUpdate($action, $projet);
+            $projet = Model::getInstance()->getById('projet', $_GET['id_projet']);
+            return self::formUpdateProjet($action, $projet);
         }
         return self::formProjet($action);
     }
@@ -26,12 +26,21 @@ class ProjetForm
         return $form;
     }
 
-    public static function formUpdate($action, $projet)
+    public static function formUpdateProjet($action, $projet)
     {
         $form = "<form action = $action method= 'POST'>
-                <p>TEST</p>
+                <input id='id_projet' name='id_projet' value=' "
+                . $projet->getId_projet() 
+                . "' style='display:none'> 
+
+                <label for = 'nom_projet'> Nom du projet </label>
+                <input id='nom_projet' type='text' name='nom_projet' value' ".$projet->getNom_projet()."'>
+
                 <button name='submit' value='submit'> submit </button>
                 </form>";
         return $form;
     }
 }
+
+
+// sécuriser les input display none 
