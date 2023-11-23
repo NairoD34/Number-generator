@@ -55,9 +55,11 @@ class UtilisateurController extends AbstractController
     public function displayCreateUtilisateur()
     {
         // Si on est déjà connectéx, on redirige vers l'accueil
+
         if (Security::is_connected()) {
             Dispatcher::redirect();
         }
+
 
         // Si l'utilisateur a posté une inscription remplie, on la traite.
         if (isset($_POST['submit']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['verif'])) {
@@ -69,6 +71,38 @@ class UtilisateurController extends AbstractController
             if ($this->verifRegister()) {
                 $this->createUtilisateur($datas);
                 Dispatcher::redirect();
+                // 'Votre compte à bien été créé';
+                return true;
+            }
+        }
+        $this->render('registration.php', []);
+    }
+    public function displayCreateUtilisateurAndAddToProjet()
+    {
+        // Si on est déjà connectéx, on redirige vers l'accueil
+
+        if (!Security::is_connected() || $_GET['id_projet'] === 0) {
+            Dispatcher::redirect();
+        }
+
+
+        // Si l'utilisateur a posté une inscription remplie, on la traite.
+        if (isset($_POST['submit']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['verif'])) {
+            $datas = [
+                'nom_utilisateur' => $_POST['username'],
+                'mdp' => password_hash($_POST['password'], PASSWORD_DEFAULT)
+
+            ];
+            $user = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']);
+            var_dump($user);
+            $datas2 = [
+                'id_utilisateur' => $user[0]->getId_utlisateur(),
+                'id_projet' => $_GET['id_projet']
+            ];
+            if ($this->verifRegister()) {
+                $this->createUtilisateur($datas);
+                Model::getInstance()->save('participe', $datas2);
+                Dispatcher::redirect('projetController', 'displayProjet', ['id_projet' => $_GET['id_projet']]);
                 // 'Votre compte à bien été créé';
                 return true;
             }

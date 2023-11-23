@@ -6,7 +6,7 @@ echo "<h1>" . $projet->getNom_projet() . "</h1>";
 
 if ($isAdmin) {
     echo "<p>(ADMIN)</p>";
-    echo '<a href=' . Dispatcher::generateUrl('ParticipeController', 'addUtilisateurToProjet', ['&id_projet=' . $projet->getId_projet(), 'try' => 0]) .  '>Ajouter un participant</a><br>';
+    echo '<a href=' . Dispatcher::generateUrl('ParticipeController', 'addUtilisateurToProjet', ['&id_projet=' . $projet->getId_projet()]) .  '>Ajouter un participant</a><br>';
 }
 
 echo '<a href=' . Dispatcher::generateUrl('TacheController', 'createTache') . '&id_projet=' . $projet->getId_projet() . '>Créer une nouvelle tâche</a><br>';
