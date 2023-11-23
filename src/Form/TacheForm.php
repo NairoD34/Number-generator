@@ -26,9 +26,14 @@ class TacheForm
             }
             $form .= ">$option</option>";
         }
-
         $form .= "</select>
-            <button name='submit' id= 'submit'> submit </button>
+            <label for = 'cdv-select'>Cycle de vie</label>
+            <select name='cdv' id='cdv-select'>";
+        $cycles = ["-" => "-- Choisissez un cycle de vie --", "1" => "Non débuté", "2" =>"En cours", "3" =>"Terminé" ];
+        foreach ($cycles as $key=>$cycle) {
+            $form .= "<option value='$key'>$cycle</option>";
+        }
+        $form .= "</select><button type='submit' name='submit' id='submit'>Envoyer</button>
             </form>";
         return $form;
     }
@@ -38,10 +43,7 @@ class TacheForm
         return self::getForm($action);
     }
 
-    public static function formUpdateTache(string $action, $tache, ?string $priorite="", ?string $cdv="")
-        // ?string $titre_tache="",
-        // ?string $description="",
-        // ?string $priorite="")
+    public static function formUpdateTache(string $action, object $tache, ?string $priorite="", ?string $cdv="")
     {
         // return self::getForm($action, $titre_tache, $description, $priorite);
         $form = "<form action = $action method='POST' >
@@ -50,7 +52,7 @@ class TacheForm
             <label for = 'titre_tache'> Titre de votre tâche </label>
             <input id='titre_tache' type='text' name='titre_tache' value='". $tache->getTitre_tache()."'>
             <label for = 'description'> Description de votre tâche </label>
-            <input id='description' type='text' name='description' value=' " .$tache->getDescription(). "'>
+            <input id='description' type='text' name='description' value='" .$tache->getDescription(). "'>
             <label for = 'priorite-select'>Niveau d'urgence</label>
             <select name='priorite' id='priorite-select'>";
             $options = ["-" => "-- Choisissez un niveau d'urgence --", "1" => "ROUGE", "2" =>"ORANGE", "3" =>"JAUNE", "4" =>"VERT"];
@@ -69,7 +71,7 @@ class TacheForm
             $cycles = ["-" => "-- Choisissez un cycle de vie --", "1" => "Non débuté", "2" =>"En cours", "3" =>"Terminé" ];
         foreach ($cycles as $key=>$cycle) {
             $form .= "<option value='$key'";
-            if ($cdv === $key) {
+            if ($cdv == $key) {
                 $form .= " selected";
             }
             $form .= ">$cycle</option>";
