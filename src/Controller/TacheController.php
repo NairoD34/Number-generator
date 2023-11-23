@@ -26,7 +26,6 @@ class TacheController extends AbstractController
         $user = Model::getInstance()->getById('utilisateur', $tache->getId_utilisateur());
 
         $this->render('tache.php', ['tache' => $tache, 'priorite' => $priorite->getLibelle(), 'cdv' => $cdv->getLibelle(), 'utilisateurs' => $user->getNom_utilisateur()]);
-        var_dump($this->canSeeTache($_GET['id_tache'], $_GET['id_projet']));
     }
 
     public function createTache()
@@ -86,9 +85,7 @@ class TacheController extends AbstractController
         $id_user = $user->getId_utilisateur();
 
         $associations = Model::getInstance()->getByIds("participe", ["utilisateur" => $id_user, "projet" => $id_projet]);
-        var_dump($associations);
         $admin = Model::getInstance()->getByIds("projet", ["utilisateur" => $id_user, "projet" => $id_projet]);
-        var_dump($admin);
         if (empty($associations) && empty($admin)) {
             return false;
         }

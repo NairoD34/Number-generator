@@ -87,7 +87,7 @@ class UtilisateurController extends AbstractController
     public function disconnect()
     {
         if (Security::is_connected()) {
-            session_unset();     
+            session_unset();
         }
         Dispatcher::redirect();
     }
@@ -109,14 +109,14 @@ class UtilisateurController extends AbstractController
             Dispatcher::redirect();
         }
 
-        $this->render('connection.php', ["form" => $form, "error" => $error]); 
+        $this->render('connection.php', ["form" => $form, "error" => $error]);
     }
 
     /**
      * Passe en revue le formulaire de connexion.
      * @return string|false : retourne un string qui contient le message d'erreur ou false s'il n'y a aucune erreur
      */
-    private function verifyConnect():string|false
+    private function verifyConnect(): string|false
     {
         if (!isset($_POST['submit'])) {
             return "Requête invalide";
@@ -131,5 +131,12 @@ class UtilisateurController extends AbstractController
         $_SESSION['username'] = $_POST['username'];
         $_SESSION['connected'] = 'connecté';
         return false;
+    }
+
+    public function displayUtilisateurs()
+    {
+        if (!Security::is_connected()) {
+            Dispatcher::redirect();
+        }
     }
 }

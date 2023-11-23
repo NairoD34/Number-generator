@@ -56,11 +56,11 @@ class ProjetController extends AbstractController
         }
         $projet = Model::getInstance()->getById('projet', $_GET['id_projet']);
         $taches = Model::getInstance()->getByAttribute('tache', 'id_projet', $_GET['id_projet']);
-        
-        $this->render('projet.php', [ 'taches' => $taches, 'projet' => $projet, 'isAdmin' => ($projet->getId_utilisateur() === $_SESSION['id']) ]);
+        $users = Model::getInstance()->getUtilisateurByProjet($_GET['id_projet']);
+        $this->render('projet.php', ['taches' => $taches, 'projet' => $projet, 'isAdmin' => ($projet->getId_utilisateur() === $_SESSION['id']), 'users' => $users]);
     }
 
-    private function canSeeProjet($id_projet):bool
+    private function canSeeProjet($id_projet): bool
     {
         if (!Security::does_this_exist("projet", $id_projet)) {
             return false;
@@ -87,7 +87,7 @@ class ProjetController extends AbstractController
 
     public function deleteProjet()
     {
-        if (!Security::is_connected()) { 
+        if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
     }
