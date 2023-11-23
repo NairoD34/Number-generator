@@ -18,7 +18,10 @@ class ProjetController extends AbstractController
             Dispatcher::redirect();  // redirection vers l'index si pas connecté
         }
         $results = Model::getInstance()->getProjetsByIdUtilisateur(Security::get_session_user()->getId_utilisateur());
-        $this->render('projets.php', ['projets' => $results]);
+        $vars = [
+            'projets' => $results,
+        ];
+        $this->render('projets.php', $vars);
     }
 
     public function createProjet()
@@ -51,10 +54,10 @@ class ProjetController extends AbstractController
         if (!Security::is_connected() || !$this->canSeeProjet($_GET['id_projet'])) {
             Dispatcher::redirect();
         }
-
         $projet = Model::getInstance()->getById('projet', $_GET['id_projet']);
         $taches = Model::getInstance()->getByAttribute('tache', 'id_projet', $_GET['id_projet']);
-        $this->render('projet.php', ['taches' => $taches, 'projet' => $projet]);
+        
+        $this->render('projet.php', [ 'taches' => $taches, 'projet' => $projet, 'isAdmin' => ($projet->getId_utilisateur() === $_SESSION['id']) ]);
     }
 
     private function canSeeProjet($id_projet):bool
@@ -80,5 +83,12 @@ class ProjetController extends AbstractController
             return "Nom de projet invalide";
         }
         return false;
+    }
+
+    public function deleteProjet()
+    {
+        if (!Security::is_connected()) { 
+            Dispatcher::redirect();
+        }
     }
 }

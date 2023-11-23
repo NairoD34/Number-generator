@@ -1,6 +1,6 @@
 <?php 
 
-echo "<h1>Ajoutez un projet</h1>";
+echo "<h1>Ajouter un projet</h1>";
 echo $form;
 
 
