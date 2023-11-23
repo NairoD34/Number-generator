@@ -31,12 +31,7 @@ abstract class Security
     return true;
   }
 
-
-
-
-
-
-  public static function get_session_user(): object|null
+ public static function get_session_user(): object|null
   {
     if (!self::is_connected()) {
       return null;
@@ -45,5 +40,16 @@ abstract class Security
       return null;
     }
     return $user;
+  }
+
+  /**
+   * Vérifie sur l'user est admin d'un projet donné
+   */
+  public static function isAdmin($id_user, $id_projet)
+  {
+    if (empty(Model::getInstance()->getByIds("projet", ["utilisateur" => $id_user, "projet" => $id_projet]))) {
+      return false;
+    }
+    return true;
   }
 }
