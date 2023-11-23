@@ -2,10 +2,14 @@
 <?php
 
 use vendor\jdl\App\Security;
-use vendor\jdl\App\Dispatcher;
+use vendor\jdl\App\Dispatcher; ?>
+
+<h1>Vos projets</h1>
+
+<?php
 
 if (Security::is_connected()) {
-    echo '<a href="index.php?controller=ProjetController&method=createProjet"> Ajouter un projet : </a><br><br>';
+    echo '<a href="index.php?controller=ProjetController&method=createProjet"><button>Ajouter un projet</button></a><br><br>';
     if(empty($projets)) {
         echo "<p>Vous n'avez actuellement aucun projet</p>";
     } else {
