@@ -145,10 +145,14 @@ class Model extends PDO
         $preparedRequest->execute($preparedDatas);
     }
 
-    public function getByAttribute($entity, $attribute, $value, $comp = '='): array
+    public function getByAttribute($entity, $attribute, $value, $comp = '=', string $orderBy = ""): array
     {
         // SELECT * FROM table WHERE attribute = value
-        $query = $this->query("SELECT * FROM $entity WHERE $attribute $comp '$value'");
+        $sql = "SELECT * FROM $entity WHERE $attribute $comp '$value'";
+        if ($orderBy !== "") {
+            $sql .= " ORDER BY $orderBy";
+        }
+        $query = $this->query($sql);
         return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . ucfirst($entity));
     }
 
@@ -185,5 +189,20 @@ class Model extends PDO
         $sql = "SELECT * FROM utilisateur u join participe p on u.id_utilisateur = p.id_utilisateur where p.id_projet = $id";
         $query = $this->query($sql);
         return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . "utilisateur");
+    }
+
+    public function getTacheWithCdvAndPriorite($propriety, $comparedValue, $comp = "=")
+    {
+        $sql = "SELECT id_tache, titre_tache, description, id_utilisateur, t.id_priorite, t.id_cdv, id_projet, c.libelle as cdv, p.libelle as priorite
+            FROM tache t
+            LEFT JOIN cycle_de_vie c
+            ON t.id_cdv = c.id_cdv
+            LEFT JOIN priorite p 
+            ON p.id_priorite = t.id_priorite
+            WHERE $propriety $comp $comparedValue
+            ORDER BY t.id_priorite";
+        $query = $this->query($sql);
+        return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . "tache");
+
     }
 }
