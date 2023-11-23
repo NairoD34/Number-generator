@@ -82,7 +82,6 @@ class TacheController extends AbstractController
             return false;
         }
 
-
         if (is_null($user = Security::get_session_user())) {
             return false;
         }
@@ -118,7 +117,7 @@ class TacheController extends AbstractController
                 // 'id_projet' => $_GET['id_projet'],
             ];
             Model::getInstance()->updateById('tache', $tache->getId_tache(), $datas);
-            Dispatcher::redirect();
+            Dispatcher::redirect("ProjetController", "displayProjet", ["id_projet" => $tache->getId_projet()]);
         }
         else {
             $vars = [
@@ -131,7 +130,9 @@ class TacheController extends AbstractController
 
     }
 
-    // Retourne une erreur si y'a un problème, autrement retourne false si y'en a pas
+    /**
+     * Retourne une erreur si y'a un problème, autrement retourne false si y'en a pas
+     **/ 
     private function validatePostTacheForm():string|false 
     {
         if (Verifier::hasHTMLShit($_POST['titre_tache']) || !Verifier::validateWord($_POST['titre_tache'], " &_',-")) {
