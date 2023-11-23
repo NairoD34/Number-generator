@@ -194,7 +194,7 @@ class Model extends PDO
     }
     public function getUtilisateurByProjet($id)
     {
-        $sql = "SELECT * FROM utilisateur u join participe p on u.id_utilisateur = p.id_utilisateur where p.id_projet = $id";
+        $sql = "SELECT u.id_utilisateur, nom_utilisateur FROM utilisateur u join participe p on u.id_utilisateur = p.id_utilisateur where p.id_projet = $id";
         $query = $this->query($sql);
         return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . "utilisateur");
     }
