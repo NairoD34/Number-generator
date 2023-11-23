@@ -54,6 +54,14 @@ final class Verifier
     return true;
   }
 
+  public static function isNumber(string $word):bool
+  {
+    if (preg_match_all("/^[0-9]*$/mu", $word)) {
+      return true;
+    }
+    return false;
+  }
+
   // Renvoie true si la chaine passée en argument contient des caractères html dangereux : "'<>&
   public static function hasHTMLShit(string $check):bool
   {
