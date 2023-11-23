@@ -16,12 +16,17 @@ class TacheController extends AbstractController
         if (!Security::is_connected() || $this->canSeeTache($_GET['id_tache'], $_GET['id_projet']) === false) {
             Dispatcher::redirect();
         }
+
         $tache = Model::getInstance()->getById('tache', $_GET['id_tache']);
+        if ($tache->getId_projet() != $_GET['id_projet']) {
+            Dispatcher::redirect();
+        }
         $priorite = Model::getInstance()->getById('priorite', $tache->getId_priorite());
         $cdv = Model::getInstance()->getCdvById('cycle_de_vie', $tache->getId_cdv());
         $user = Model::getInstance()->getById('utilisateur', $tache->getId_utilisateur());
 
         $this->render('tache.php', ['tache' => $tache, 'priorite' => $priorite->getLibelle(), 'cdv' => $cdv->getLibelle(), 'utilisateurs' => $user->getNom_utilisateur()]);
+        var_dump($this->canSeeTache($_GET['id_tache'], $_GET['id_projet']));
     }
 
     public function createTache()
@@ -74,6 +79,7 @@ class TacheController extends AbstractController
             return false;
         }
 
+
         if (is_null($user = Security::get_session_user())) {
             return false;
         }
@@ -84,6 +90,9 @@ class TacheController extends AbstractController
         $admin = Model::getInstance()->getByIds("projet", ["utilisateur" => $id_user, "projet" => $id_projet]);
         var_dump($admin);
         if (empty($associations) && empty($admin)) {
+            return false;
+        }
+        if ($associations === null && $admin[0]->getId_utilisateur() != $_SESSION['id']) {
             return false;
         }
         return true;

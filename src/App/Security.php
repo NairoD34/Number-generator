@@ -31,13 +31,7 @@ abstract class Security
     return true;
   }
 
-  public static function does_this_exist_and(string $entity1, $id1, $entity2, $id2)
-  {
-    if (empty(Model::getInstance()->getByAttribute($entity1, 'id_' . $entity1, $id1)) && empty(Model::getInstance()->getByAttribute($entity1, 'id_' . $entity2, $id2))) {
-      return false;
-    }
-    return true;
-  }
+
 
 
 
