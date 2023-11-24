@@ -22,7 +22,6 @@ class ProjetForm
                 <input id='nom_projet' type='text' name='nom_projet'>
                 <button name='submit' id= 'submit'> submit </button>
                 </form>";
-        // $this->render('projet.php', ['form'=> $form]);
         return $form;
     }
 
@@ -42,5 +41,3 @@ class ProjetForm
     }
 }
 
-
-// sécuriser les input display none 
