@@ -52,4 +52,18 @@ abstract class Security
     }
     return true;
   }
+
+  /**
+   * Renvoie une string d'erreur si le nom est invalide. Sinon, renvoie false.
+   */
+  public static function isUserNameInvalid(string $name): string|false
+  {
+    if ($name === "") {
+      return "Entrée de nom d'utilisateur invalide : champ vide";
+    }
+    if (Verifier::hasHTMLShit($name) || !Verifier::validateWord($name, '_@!#0-9-')) {
+      return "Entrée de nom d'utilisateur invalide : caractères interdits";
+    }
+    return false;
+  }
 }
