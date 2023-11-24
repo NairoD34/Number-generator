@@ -68,7 +68,8 @@ class UtilisateurController extends AbstractController
             ];
             if ($this->verifRegister()) {
                 $this->createUtilisateur($datas);
-                Dispatcher::redirect();
+                $this->render('index.php', ["message" => 'Votre compte à bien été créé']);
+                //Dispatcher::redirect();
                 // 'Votre compte à bien été créé';
                 return true;
             }
