@@ -115,7 +115,6 @@ class Model extends PDO
             $i++;
         }
         $sql = $sql . ')';
-        echo $sql;
         $preparedRequest = $this->prepare($sql);
         $preparedRequest->execute($preparedDatas);
     }
@@ -194,7 +193,6 @@ class Model extends PDO
             $sql .= " AND p.id_projet = $id_projet";
         }
         $sql .= " GROUP BY p.id_projet";
-        echo $sql;
         $query = $this->query($sql);
         return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . "projet");
     }
