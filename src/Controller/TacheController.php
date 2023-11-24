@@ -65,7 +65,7 @@ class TacheController extends AbstractController
     /**
      * supprime la tache en récupérant l'id 
      */
-    
+
     private function supprTache($id)
     {
         Model::getInstance()->supprById('tache', $id);
@@ -73,18 +73,19 @@ class TacheController extends AbstractController
 
     public function displaySupprTache()
     {
-        if (!Security::is_connected() || 
+        if (
+            !Security::is_connected() ||
             !isset($_GET['id_tache']) ||
             !Security::does_this_exist("tache", isset($_GET['id_tache']))
         ) {
             Dispatcher::redirect();
         }
 
-        $projetId = Model::getInstance()->getById( "tache", $_GET['id_tache'])->getId_projet();
+        $projetId = Model::getInstance()->getById("tache", $_GET['id_tache'])->getId_projet();
         if (!Security::isAdmin(Security::get_session_user()->getId_utilisateur(), $projetId)) {
             Dispatcher::redirect();
         }
-        
+
         $this->supprTache($_GET['id_tache']);
         Dispatcher::redirect('projetController', 'displayProjet', ["id_projet" => $_GET["id_projet"]]);
     }
@@ -102,7 +103,7 @@ class TacheController extends AbstractController
             Dispatcher::redirect();
         }
 
-        if (isset($_POST['submit']) && !($error = $this->validatePostTacheForm())){
+        if (isset($_POST['submit']) && !($error = $this->validatePostTacheForm())) {
             $datas = [
                 'titre_tache' => $_POST['titre_tache'],
                 'description' => $_POST['description'],
@@ -113,15 +114,13 @@ class TacheController extends AbstractController
 
             Model::getInstance()->updateById('tache', $tache->getId_tache(), $datas);
             Dispatcher::redirect("ProjetController", "displayProjet", ["id_projet" => $tache->getId_projet()]);
-        }
-        else {
+        } else {
             $vars = [
-                'form' => TacheForm::createForm(Dispatcher::generateUrl('TacheController','updateTache', ["id_tache" => $_GET['id_tache']]), 'update', $_GET['id_tache']),
+                'form' => TacheForm::createForm(Dispatcher::generateUrl('TacheController', 'updateTache', ["id_tache" => $_GET['id_tache']]), 'update', $_GET['id_tache']),
                 'error' => empty($error) ? null : $error,
             ];
             $this->render('taches.php', $vars);
         }
-
     }
 
     private function canSeeTache($id_tache, $id_projet)
@@ -148,8 +147,8 @@ class TacheController extends AbstractController
 
     /**
      * Retourne une erreur si y'a un problème, autrement retourne false si y'en a pas
-     **/ 
-    private function validatePostTacheForm():string|false 
+     **/
+    private function validatePostTacheForm(): string|false
     {
         if (Verifier::hasHTMLShit($_POST['titre_tache']) || !Verifier::validateWord($_POST['titre_tache'], " &_',-")) {
             return "Titre de tâche invalide (caractères interdits)";
@@ -168,41 +167,41 @@ class TacheController extends AbstractController
 
     public function updateUtilisateurToTache()
     {
-        if (!Security::is_connected()){
+        if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
 
-        if (isset($_POST['submit'])){
+        if (isset($_POST['submit'])) {
 
-            if (!empty(Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']))) {
-                $id_users = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username'])[0];
-                if (!empty(Model::getInstance()->getUtilisateurByProjet($id_users->getId_utilisateur()))){
+            $id_users = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username'])[0];
+            if (!empty($id_users) && Model::getInstance()->getByIds('participe', ['utilisateur' => $id_users->getId_utilisateur(), 'projet' => $_GET['id_projet']])) {
+                if (!empty(Model::getInstance()->getUtilisateurByProjet($id_users->getId_utilisateur()))) {
                     $user = Model::getInstance()->readAll('utilisateur', 'nom_utilisateur');
                     $error = "Cet utilisateur est déjà attribué à votre tâche !";
                     $this->render('updateutilisateurtotache.php', [
-                        'form'=> TacheForm::getFormTache(Dispatcher::generateUrl('TacheController', 'updateUtilisateurToTache', ['id_projet' => $_GET['id_projet'], 'id_tache' => $_GET['id_tache']]), $user),
-                        'error'=> $error
+                        'form' => TacheForm::getFormTache(Dispatcher::generateUrl('TacheController', 'updateUtilisateurToTache', ['id_projet' => $_GET['id_projet'], 'id_tache' => $_GET['id_tache']]), $user),
+                        'error' => $error
                     ]);
                 } else {
                     $data = [
-                        'id_utilisateur'=> $id_users->getId_utilisateur(),
+                        'id_utilisateur' => $id_users->getId_utilisateur(),
                         'id_tache' => $_GET['id_tache']
                     ];
 
                     Model::getInstance()->updateById('tache', $_GET['id_tache'], $data);
 
                     Dispatcher::redirect('ProjetController', 'displayProjet', [
-                        'id_projet'=> $_GET['id_projet'],
+                        'id_projet' => $_GET['id_projet'],
                         // 'id_tache' => $_GET['id_tache']
                     ]);
                 }
             } else {
                 // echo 'coucou';
-                $user = Model::getInstance()->readAll('utilisateur','nom_utilisateur');
+                $user = Model::getInstance()->readAll('utilisateur', 'nom_utilisateur');
                 $error = "Cet utilisateur ne participe pas à votre projet veuillez le rajouter en cliquant ici <a href =" . Dispatcher::generateUrl('ParticipeController', 'addUtilisateurToProjet', ['id_projet' => $_GET['id_projet'], 'id_tache' => $_GET['id_tache']]) . "><button>Ajouter votre participant</button></a>";
-                $this->render('updateutilisateurtotache.php' , [
-                    'form'=> TacheForm::getFormTache(Dispatcher::generateUrl('TacheController', 'updateUtilisateurToTache' , ['id_projet' => $_GET['id_projet'], 'id_tache'=> $_GET['id_tache']]), $user),
-                    'error'=> $error
+                $this->render('updateutilisateurtotache.php', [
+                    'form' => TacheForm::getFormTache(Dispatcher::generateUrl('TacheController', 'updateUtilisateurToTache', ['id_projet' => $_GET['id_projet'], 'id_tache' => $_GET['id_tache']]), $user),
+                    'error' => $error
                 ]);
             }
         } else {
