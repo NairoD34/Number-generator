@@ -13,14 +13,14 @@ echo "Priorité de la tâche : " . $priorite . "<br>";
 echo "Statut de la tâche : " . $cdv . "<br>";
 echo "Personne rattaché à la tache : " . $utilisateurs;
 
-// if ($isAdmin()){
+if (Security::isAdmin($_SESSION['id'], $_GET['id_projet'])){
     echo "<p>(ADMIN)</p>";
     echo '<a href='. Dispatcher::generateUrl('TacheController', 'updateUtilisateurToTache', [
         'id_projet' => $_GET['id_projet'],
         'id_tache' => $_GET['id_tache'],
 
         ]). '>Modifier le participant à la tâche</a><br>';
-// }
+}
 
 // changer la personne rattaché a la tache 
 // regarder le form pour ajouter un participant 

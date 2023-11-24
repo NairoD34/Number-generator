@@ -199,7 +199,7 @@ class TacheController extends AbstractController
             } else {
                 // echo 'coucou';
                 $user = Model::getInstance()->readAll('utilisateur','nom_utilisateur');
-                $error = "Cet utilisateur ne participe pas à votre projet veuillez le rajouter en cliquant ici <a href =" . Dispatcher::generateUrl('ParticipeController', 'addUtilisateurToProjet', ['id_tache' => $_GET['id_tache']]) . "><button>Ajouter votre participant</button></a>";
+                $error = "Cet utilisateur ne participe pas à votre projet veuillez le rajouter en cliquant ici <a href =" . Dispatcher::generateUrl('ParticipeController', 'addUtilisateurToProjet', ['id_projet' => $_GET['id_projet'], 'id_tache' => $_GET['id_tache']]) . "><button>Ajouter votre participant</button></a>";
                 $this->render('updateutilisateurtotache.php' , [
                     'form'=> TacheForm::getFormTache(Dispatcher::generateUrl('TacheController', 'updateUtilisateurToTache' , ['id_projet' => $_GET['id_projet'], 'id_tache'=> $_GET['id_tache']]), $user),
                     'error'=> $error
