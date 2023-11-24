@@ -36,7 +36,6 @@ class TacheController extends AbstractController
      */
     public function createTache()
     {
-        // Ceci n'est pas sécurisé **************************************************
         if (!Security::is_connected()) {
             Dispatcher::redirect();
         }
@@ -151,10 +150,10 @@ class TacheController extends AbstractController
      **/ 
     private function validatePostTacheForm():string|false 
     {
-        if (Verifier::hasHTMLShit($_POST['titre_tache']) || !Verifier::validateWord($_POST['titre_tache'], " &_',-")) {
+        if (!Verifier::validateWord($_POST['titre_tache'], " &_',-")) {
             return "Titre de tâche invalide (caractères interdits)";
         }
-        if (Verifier::hasHTMLShit($_POST['description']) || !Verifier::validateWord($_POST['description'], " &_',-")) {
+        if (!Verifier::validateWord($_POST['description'], " &_',-")) {
             return "Description de tâche invalide (caractères interdits)";
         }
         if (Verifier::hasHTMLShit($_POST['priorite']) || !Verifier::isNumber($_POST['priorite'])) {

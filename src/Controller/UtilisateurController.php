@@ -74,8 +74,6 @@ class UtilisateurController extends AbstractController
             if ($this->verifRegister()) {
                 $this->createUtilisateur($datas);
                 $this->render('index.php', ["message" => 'Votre compte à bien été créé']);
-                //Dispatcher::redirect();
-                // 'Votre compte à bien été créé';
                 return true;
             }
         }
@@ -119,6 +117,7 @@ class UtilisateurController extends AbstractController
     {
         Model::getInstance()->save('utilisateur', $datas);
     }
+
     private function displayCreateAndAddUtilisateur($datas)
     {
         if (isset($_POST['submit']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['verif'])) {
@@ -132,7 +131,6 @@ class UtilisateurController extends AbstractController
 
                 Dispatcher::redirect('ProjetController', 'displayProjets');
                 // 'Votre compte à bien été créé';
-                return true;
             }
         }
         $this->render('registrationAdd.php', []);
@@ -154,7 +152,6 @@ class UtilisateurController extends AbstractController
      */
     public function displayConnectUtilisateur()
     {
-        $form = UtilisateurForm::formConnect(Dispatcher::generateUrl("UtilisateurController", "displayConnectUtilisateur"));
         // Si l'utilisateur ne tente pas de se connecter, on ne traite pas le formulaire
         if (!isset($_POST['submit'])) {
             $this->render('connection.php', ["form" => $form]);
@@ -166,6 +163,7 @@ class UtilisateurController extends AbstractController
             Dispatcher::redirect();
         }
 
+        $form = UtilisateurForm::formConnect(Dispatcher::generateUrl("UtilisateurController", "displayConnectUtilisateur"));
         $this->render('connection.php', ["form" => $form, "error" => $error]);
     }
 
@@ -177,6 +175,10 @@ class UtilisateurController extends AbstractController
     {
         if (!isset($_POST['submit'])) {
             return "Requête invalide";
+        }
+
+        if (($error = Security::isUserNameInvalid($_POST['username'])) !== false) {
+            return $error;
         }
 
         $user = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']);
