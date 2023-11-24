@@ -81,7 +81,7 @@ class UtilisateurController extends AbstractController
     {
         // Si on est déjà connectéx, on redirige vers l'accueil
 
-        if (!Security::is_connected() || $_GET['id_projet'] === 0) {
+        if (!Security::is_connected() || is_null($_GET['id_projet'])) {
             Dispatcher::redirect();
         }
 
@@ -93,21 +93,21 @@ class UtilisateurController extends AbstractController
                 'mdp' => password_hash($_POST['password'], PASSWORD_DEFAULT)
 
             ];
-            $user = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']);
-            var_dump($user);
-            $datas2 = [
-                'id_utilisateur' => $user[0]->getId_utlisateur(),
-                'id_projet' => $_GET['id_projet']
-            ];
             if ($this->verifRegister()) {
                 $this->createUtilisateur($datas);
+                $user = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']);
+                var_dump($user);
+                $datas2 = [
+                    'id_projet' => $_GET['id_projet'],
+                    'id_utilisateur' => $user[0]->getId_utilisateur(),
+                ];
                 Model::getInstance()->save('participe', $datas2);
                 Dispatcher::redirect('projetController', 'displayProjet', ['id_projet' => $_GET['id_projet']]);
                 // 'Votre compte à bien été créé';
                 return true;
             }
         }
-        $this->render('registration.php', []);
+        $this->render('registrationadd.php', []);
     }
 
     // cette function permet de traiter des datas user et des les intégrer à la BDD

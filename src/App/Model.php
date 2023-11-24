@@ -115,6 +115,7 @@ class Model extends PDO
             $i++;
         }
         $sql = $sql . ')';
+        echo $sql;
         $preparedRequest = $this->prepare($sql);
         $preparedRequest->execute($preparedDatas);
     }
@@ -148,7 +149,7 @@ class Model extends PDO
             }
             $i++;
         }
-        $sql = $sql . " WHERE id_". $entity ." = '$id'";
+        $sql = $sql . " WHERE id_" . $entity . " = '$id'";
         $preparedRequest = $this->prepare($sql);
         $preparedRequest->execute($preparedDatas);
     }
@@ -211,6 +212,5 @@ class Model extends PDO
             ORDER BY t.id_priorite";
         $query = $this->query($sql);
         return $query->fetchAll(PDO::FETCH_CLASS, Config::ENTITY . "tache");
-
     }
 }
