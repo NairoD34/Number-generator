@@ -105,6 +105,7 @@ class UtilisateurController extends AbstractController
                 Model::getInstance()->save('participe', $datas2);
                 Dispatcher::redirect('projetController', 'displayProjet', ['id_projet' => $_GET['id_projet']]);
                 // 'Votre compte à bien été créé';
+
                 return true;
             }
         }
