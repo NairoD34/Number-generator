@@ -174,7 +174,7 @@ class TacheController extends AbstractController
         if (isset($_POST['submit'])) {
 
             $id_users = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username'])[0];
-            if (!empty($id_users) && Model::getInstance()->getByIds('participe', ['utilisateur' => $id_users->getId_utilisateur(), 'projet' => $_GET['id_projet']])) {
+            if (!empty($id_users) && (Model::getInstance()->getByIds('participe', ['utilisateur' => $id_users->getId_utilisateur(), 'projet' => $_GET['id_projet']]) || Security::isAdmin($_SESSION['id'], $_GET['id_projet']))) {
                 if (!empty(Model::getInstance()->getUtilisateurByProjet($id_users->getId_utilisateur()))) {
                     $user = Model::getInstance()->readAll('utilisateur', 'nom_utilisateur');
                     $error = "Cet utilisateur est déjà attribué à votre tâche !";
