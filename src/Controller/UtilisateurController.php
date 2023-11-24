@@ -153,6 +153,7 @@ class UtilisateurController extends AbstractController
      */
     public function displayConnectUtilisateur()
     {
+        $form = UtilisateurForm::formConnect(Dispatcher::generateUrl("UtilisateurController", "displayConnectUtilisateur"));
         // Si l'utilisateur ne tente pas de se connecter, on ne traite pas le formulaire
         if (!isset($_POST['submit'])) {
             $this->render('connection.php', ["form" => $form]);
@@ -164,7 +165,7 @@ class UtilisateurController extends AbstractController
             Dispatcher::redirect();
         }
 
-        $form = UtilisateurForm::formConnect(Dispatcher::generateUrl("UtilisateurController", "displayConnectUtilisateur"));
+       
         $this->render('connection.php', ["form" => $form, "error" => $error]);
     }
 

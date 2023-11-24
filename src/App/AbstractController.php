@@ -23,7 +23,8 @@ class AbstractController
         echo "<!DOCTYPE html><html>";
         include_once(__DIR__ . '/../View/head.php');
         include_once(__DIR__ . '/../View/header.php');
+        echo "<main>";
         include_once(__DIR__ . '/../View/' . $view);
-        echo "</html>";
+        echo "</main></html>";
     }
 }

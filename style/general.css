@@ -1,0 +1,90 @@
+/**
+ * Le coin du front-end
+ */
+
+body {
+	margin: 0;
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: whitesmoke;
+}
+
+main {
+	box-sizing: border-box;
+	max-width: 52em;
+	margin: auto;
+	padding: 2em;
+	box-shadow: 0 0 5px lightgray;
+	min-height: 100%;
+	background-color: ghostwhite;
+}
+
+header {
+	background-color: lightgray;
+	padding: .8em;
+}
+
+nav ul {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	margin: 0;
+	padding: 0;
+}
+
+nav ul li {
+	list-style-type: none;
+	margin: 0 .7em;
+	font-size: 1.2em;
+
+}
+
+a {
+	text-decoration: none;
+	font-weight: bold;
+	color: black;
+	transition: color .2s ease;
+}
+
+a:hover {
+	color: darkorchid;
+}
+
+form input, form label {
+	margin: .5em;
+	display: block;
+}
+
+ul {
+	padding: 0;
+}
+
+li {
+	list-style-type: none;
+}
+
+.card {
+	padding: 0.4em;
+	margin: 1em;
+	border-radius: 4px;
+	box-shadow: 0 0 5px lightgray;
+}
+
+.card .card-title {
+	display: block;
+}
+
+.priority-JAUNE {
+	background-color: #fbfb6a;
+}
+
+.priority-ORANGE {
+	background-color: #fb9a6a;
+}
+
+.priority-ROUGE {
+	background-color: palevioletred;
+}
+
+.priority-VERT {
+	background-color: lightgreen;
+}

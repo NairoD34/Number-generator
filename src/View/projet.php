@@ -14,20 +14,19 @@ if ($isAdmin) {
     echo '<a style="color: red;" href=' . Dispatcher::generateUrl('ProjetController', 'displaySupprProjet') . '&id_projet=' . $projet->getId_projet() . '>Supprimer le projet</a><br>';
     echo '<a style="color: red;" href=' . Dispatcher::generateUrl('ProjetController', 'updateProjet') . '&id_projet=' . $projet->getId_projet() . '>Modifier le projet</a><br>';
 }
-echo "<ul>";
+echo "<h2>Participants</h2><ul>";
 foreach ($users as $user) {
     echo '<li>' . $user->getNom_utilisateur() . '</li>';
 }
 echo "</ul>";
-echo "<ul>";
-echo '<br>';
+echo "<h2>Tâches</h2><ul>";
 
 foreach ($taches as $tache) {
-    echo '<li><a href=' . Dispatcher::generateUrl("TacheController", "displayTache", ['id_projet' => $projet->getId_projet(), "id_tache" => $tache->getId_tache()]) . '>' . $tache->getTitre_tache() . '</a></li>
-    <span>(' . $tache->getPriorite() . ') (' . $tache->getCdv() . ')</span>';
+    echo '<li class="card priority-' . $tache->getPriorite() . '"><a class="card-title" href=' . Dispatcher::generateUrl("TacheController", "displayTache", ['id_projet' => $projet->getId_projet(), "id_tache" => $tache->getId_tache()]) . '>' . $tache->getTitre_tache() . '</a><span>(' . $tache->getPriorite() . ') (' . $tache->getCdv() . ')</span>';
     if ($isAdmin) {
         echo '<a href=' . Dispatcher::generateUrl('tacheController', 'displaySupprTache', ['id_tache' => $tache->getId_tache(), 'id_projet' => $projet->getId_projet()]) . '><button>Supprimer</button></a>
         <a href=' . Dispatcher::generateUrl('tacheController', 'updateTache', ['id_tache' => $tache->getId_tache(), 'id_projet' => $projet->getId_projet()]) . '><button>Modifier</button></a>';
     }
+    echo "</li>";
 }
 echo "</ul>";
