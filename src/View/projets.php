@@ -9,7 +9,7 @@ use vendor\jdl\App\Dispatcher; ?>
 <?php
 
 if (Security::is_connected()) {
-    echo '<a href="index.php?controller=ProjetController&method=createProjet"><button>Ajouter un projet</button></a><br><br>';
+    echo '<a href=' . Dispatcher::generateUrl('ProjetController', 'createProjet') . '><button>Ajouter un projet</button></a><br><br>';
     if(empty($projets)) {
         echo "<p>Vous n'avez actuellement aucun projet</p>";
     } else {

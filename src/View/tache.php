@@ -6,7 +6,6 @@ use vendor\jdl\App\Security;
 
 
 echo "<h1>". $tache->getTitre_tache() . "</h1>";
-//echo "<a href=" . Dispatcher::generateUrl('TacheController', 'createTache', ['id_projet' => $_GET['id_projet']]) . ">Créer une nouvelle tâche</a><br>";
 
 echo "Description de la tâche : " . $tache->getDescription() . "<br>";
 echo "Priorité de la tâche : " . $priorite . "<br>";
@@ -21,8 +20,3 @@ if (Security::isAdmin($_SESSION['id'], $_GET['id_projet'])){
 
         ]). '>Modifier le participant à la tâche</a><br>';
 }
-
-// changer la personne rattaché a la tache 
-// regarder le form pour ajouter un participant 
-// ajout un btn modif qui redirige vers le form 
-// changer l'id utilisateur sur la table tache 

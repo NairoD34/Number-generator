@@ -98,7 +98,7 @@ class ProjetController extends AbstractController
      * pas connecté ? redirection vers l'index
      * modification de nom du projet en récupérant l'id du projet si on est l'admin du projet
      */
-    public function updateProjet() // SECURITER
+    public function updateProjet()
     {
         if (!Security::is_connected()) {
             Dispatcher::redirect();

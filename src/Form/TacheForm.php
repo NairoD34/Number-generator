@@ -45,7 +45,6 @@ class TacheForm
 
     public static function formUpdateTache(string $action, object $tache, ?string $priorite="", ?string $cdv="")
     {
-        // return self::getForm($action, $titre_tache, $description, $priorite);
         $form = "<form action = $action method='POST' >
             <input id='id_tache' name='id_tache' value=' " . $tache->getId_tache() . "' style='display:none'>
 
