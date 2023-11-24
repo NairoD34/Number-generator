@@ -166,7 +166,7 @@ class TacheController extends AbstractController
         return false;
     }
 
-    public function updateUtilisateurToTache()
+    public function updateUtilisateurToTache() //Méthode non sécure
     {
         if (!Security::is_connected()){
             Dispatcher::redirect();
