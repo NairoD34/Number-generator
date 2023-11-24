@@ -24,10 +24,13 @@ class UtilisateurController extends AbstractController
             'verif' => $_POST['verif'],
         ];
         $errors = [];
-        if ($datas == '') {
-            $errors[] = 'Un ou plusieurs champs sont vides';
+        foreach($datas as $key => $value) {
+            if (empty($value)) {
+                $errors[] = 'Votre entrée "'. $key .'" est vide';
+            }
         }
-        if (!Verifier::validateWord($datas['username'], '_@!#0-9-')) {
+        
+        if (Security::isUserNameInvalid($datas['username']) !== false) {
             $errors[] = 'Vous utilisez des caractères interdits sur votre nom de compte';
         }
         if (Verifier::hasForbiddenChars($datas['password'], '<>"\'')) {
