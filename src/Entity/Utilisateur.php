@@ -8,8 +8,6 @@ class Utilisateur
     private ?string $nom_utilisateur;
     private ?string $mdp;
 
-
-
     /**
      * Get the value of id_utilisateur
      */
