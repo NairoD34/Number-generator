@@ -49,7 +49,6 @@ class TacheController extends AbstractController
                 'id_priorite' => $_POST['priorite'],
                 'id_cdv' => $_POST['cdv'],
                 'id_projet' => $_GET['id_projet'],
-
             ];
 
             Model::getInstance()->save('tache', $datas);
@@ -74,37 +73,20 @@ class TacheController extends AbstractController
 
     public function displaySupprTache()
     {
-        // Ceci n'est pas sécurisé **************************************************
-        if (!Security::is_connected()) {
+        if (!Security::is_connected() || 
+            !isset($_GET['id_tache']) ||
+            !Security::does_this_exist("tache", isset($_GET['id_tache']))
+        ) {
             Dispatcher::redirect();
         }
 
-        if (isset($_GET['id_tache'])) {
-            $this->supprTache($_GET['id_tache']);
-            Dispatcher::redirect('projetController', 'displayProjet', ["id_projet" => $_GET["id_projet"]]);
+        $projetId = Model::getInstance()->getById( "tache", $_GET['id_tache'])->getId_projet();
+        if (!Security::isAdmin(Security::get_session_user()->getId_utilisateur(), $projetId)) {
+            Dispatcher::redirect();
         }
-    }
-    // ça marche pas il faut la changer
-    private function canSeeTache($id_tache, $id_projet)
-    {
-        if (!Security::does_this_exist("tache", $id_tache)) {
-            return false;
-        }
-
-        if (is_null($user = Security::get_session_user())) {
-            return false;
-        }
-        $id_user = $user->getId_utilisateur();
-
-        $associations = Model::getInstance()->getByIds("participe", ["utilisateur" => $id_user, "projet" => $id_projet]);
-        $admin = Model::getInstance()->getByIds("projet", ["utilisateur" => $id_user, "projet" => $id_projet]);
-        if (empty($associations) && empty($admin)) {
-            return false;
-        }
-        if ($associations === null && $admin[0]->getId_utilisateur() != $_SESSION['id']) {
-            return false;
-        }
-        return true;
+        
+        $this->supprTache($_GET['id_tache']);
+        Dispatcher::redirect('projetController', 'displayProjet', ["id_projet" => $_GET["id_projet"]]);
     }
 
     /**
@@ -140,6 +122,28 @@ class TacheController extends AbstractController
             $this->render('taches.php', $vars);
         }
 
+    }
+
+    private function canSeeTache($id_tache, $id_projet)
+    {
+        if (!Security::does_this_exist("tache", $id_tache)) {
+            return false;
+        }
+
+        if (is_null($user = Security::get_session_user())) {
+            return false;
+        }
+        $id_user = $user->getId_utilisateur();
+
+        $associations = Model::getInstance()->getByIds("participe", ["utilisateur" => $id_user, "projet" => $id_projet]);
+        $admin = Model::getInstance()->getByIds("projet", ["utilisateur" => $id_user, "projet" => $id_projet]);
+        if (empty($associations) && !Security::isAdmin($id_user, $id_projet)) {
+            return false;
+        }
+        if ($associations === null && $admin[0]->getId_utilisateur() != $_SESSION['id']) {
+            return false;
+        }
+        return true;
     }
 
     /**
