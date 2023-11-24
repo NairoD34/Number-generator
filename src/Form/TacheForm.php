@@ -92,7 +92,19 @@ class TacheForm
         }
         return self::formNewTache($action);
     }
+
+    public static function getFormTache(string $action, array $options = [])
+    {
+        $form = "<form action='$action' method='POST' >
+      <label for='username'></label>
+      <input type='text' id='username' name='username' >
+      <button type='submit' name='submit'>Ajouter</button>
+      <datalist>";
+    foreach ($options as $value) {
+      $form .= "<option value=" . $value->getNom_utilisateur() . "></option>";
+    }
+    $form .= "</datalist></form>";
+    return $form;
+    }
 }
 
-
-// sécuriser les input display none 
