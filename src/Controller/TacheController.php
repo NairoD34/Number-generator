@@ -173,9 +173,9 @@ class TacheController extends AbstractController
 
         if (isset($_POST['submit'])) {
 
-            $id_users = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username'])[0];
-            if (!empty($id_users) && (Model::getInstance()->getByIds('participe', ['utilisateur' => $id_users->getId_utilisateur(), 'projet' => $_GET['id_projet']]) || Security::isAdmin($_SESSION['id'], $_GET['id_projet']))) {
-                if (!empty(Model::getInstance()->getUtilisateurByProjet($id_users->getId_utilisateur()))) {
+            $user = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username'])[0];
+            if (!empty($id_users) || !empty(Model::getInstance()->getProjetsByIdUtilisateur($user->getId_utilisateur(),  $_GET['id_projet']))) {
+                if (!empty(Model::getInstance()->getUtilisateurByProjet($user->getId_utilisateur()))) {
                     $user = Model::getInstance()->readAll('utilisateur', 'nom_utilisateur');
                     $error = "Cet utilisateur est déjà attribué à votre tâche !";
                     $this->render('updateutilisateurtotache.php', [
@@ -184,18 +184,18 @@ class TacheController extends AbstractController
                     ]);
                 } else {
                     $data = [
-                        'id_utilisateur' => $id_users->getId_utilisateur(),
+                        'id_utilisateur' => $user->getId_utilisateur(),
                         'id_tache' => $_GET['id_tache']
                     ];
 
                     Model::getInstance()->updateById('tache', $_GET['id_tache'], $data);
 
                     Dispatcher::redirect('ProjetController', 'displayProjet', [
-                        'id_projet'=> $_GET['id_projet'],
+                        'id_projet' => $_GET['id_projet'],
                     ]);
                 }
             } else {
-                $user = Model::getInstance()->readAll('utilisateur','nom_utilisateur');
+                $user = Model::getInstance()->readAll('utilisateur', 'nom_utilisateur');
                 $error = "Cet utilisateur ne participe pas à votre projet veuillez le rajouter en cliquant ici <a href =" . Dispatcher::generateUrl('ParticipeController', 'addUtilisateurToProjet', ['id_projet' => $_GET['id_projet'], 'id_tache' => $_GET['id_tache']]) . "><button>Ajouter votre participant</button></a>";
                 $this->render('updateutilisateurtotache.php', [
                     'form' => TacheForm::getFormTache(Dispatcher::generateUrl('TacheController', 'updateUtilisateurToTache', ['id_projet' => $_GET['id_projet'], 'id_tache' => $_GET['id_tache']]), $user),
