@@ -55,4 +55,10 @@ class ParticipeController extends AbstractController
             ]);
         }
     }
+
+
+    private function isUserNameValid() 
+    {
+        //finish me
+    }
 }
