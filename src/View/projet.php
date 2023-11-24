@@ -15,8 +15,6 @@ if ($isAdmin) {
     echo '<a style="color: red;" href=' . Dispatcher::generateUrl('ProjetController', 'updateProjet') . '&id_projet=' . $projet->getId_projet() . '>Modifier le projet</a><br>';
 }
 echo "<ul>";
-// echo '<a href=' . Dispatcher::generateUrl('projetController', 'updateProjet', ['id_projet' => $projet->getId_projet()]) . '><button>Modifier</button></a>';
-// echo '<a href="' . Dispatcher::generateUrl('projetController', 'displaySupprProjet', ['id_projet' => $projet->getId_projet()]) . '"><button>Supprimer</button></a>';
 foreach ($users as $user) {
     echo '<li>' . $user->getNom_utilisateur() . '</li>';
 }
