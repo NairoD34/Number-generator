@@ -1,23 +1,14 @@
 {
-    "name": "vendor/jdl",
-    "description": "Tarpin projet",
+    "name": "number/gen",
+    "description": "perso",
     "autoload": {
         "psr-4": {
-            "vendor\\jdl\\": "src/"
+            "number\\gen\\": "src/"
         }
     },
     "authors": [
         {
-            "name": "Velvet"
-        },
-        {
-            "name": "Lilya"
-        },
-        {
             "name": "Dorian"
-        },
-        {
-            "name": "Thomas"
         }
     ],
     "require": {}
