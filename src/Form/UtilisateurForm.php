@@ -1,6 +1,6 @@
 <?php
 
-namespace vendor\jdl\Form;
+namespace number\gen\Form;
 
 class UtilisateurForm
 {

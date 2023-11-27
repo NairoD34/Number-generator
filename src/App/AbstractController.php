@@ -1,6 +1,6 @@
 <?php
 
-namespace vendor\jdl\App;
+namespace number\gen\App;
 
 class AbstractController
 {

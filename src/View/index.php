@@ -1,7 +1,8 @@
-<?php 
-use vendor\jdl\App\Security;
+<?php
 
-if (!Security::is_connected()) :?>
+use number\gen\App\Security;
+
+if (!Security::is_connected()) : ?>
   <h1>Bienvenux !!!</h1>
 <?php else : ?>
   <h1>Bienvenux, <?php echo $_SESSION['username']; ?>!!!</h1>

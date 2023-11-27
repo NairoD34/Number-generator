@@ -1,6 +1,6 @@
 <?php
 
-namespace vendor\jdl\App;
+namespace number\gen\App;
 
 // Valide des formulaires
 
@@ -46,7 +46,7 @@ final class Verifier
    * @param string $forbiddenChars : A string containing the invalid characters (ex: "_ -")
    * @return bool : true if the $word contains invalid characters
    */
-  public static function hasForbiddenChars(string $word, string $forbiddenChars):bool
+  public static function hasForbiddenChars(string $word, string $forbiddenChars): bool
   {
     if (preg_match_all("/^[^" . $forbiddenChars . "]*$/mu", $word)) {
       return false;
@@ -54,7 +54,7 @@ final class Verifier
     return true;
   }
 
-  public static function isNumber(string $word):bool
+  public static function isNumber(string $word): bool
   {
     if (preg_match_all("/^[0-9]*$/mu", $word)) {
       return true;
@@ -63,7 +63,7 @@ final class Verifier
   }
 
   // Renvoie true si la chaine passée en argument contient des caractères html dangereux : "'<>&
-  public static function hasHTMLShit(string $check):bool
+  public static function hasHTMLShit(string $check): bool
   {
     if (htmlspecialchars($check) !== $check) {
       return true;

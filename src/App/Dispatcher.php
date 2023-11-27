@@ -1,8 +1,8 @@
 <?php
 
-namespace vendor\jdl\App;
+namespace number\gen\App;
 
-use vendor\jdl\Config\Config;
+use number\gen\Config\Config;
 
 class Dispatcher
 {
@@ -31,16 +31,15 @@ class Dispatcher
     /**
      * Génère une URL avec le nom du controlleur et sa méthode
      */
-    public static function generateUrl(string $controllerName="", string $method="", ?array $query=null):string
+    public static function generateUrl(string $controllerName = "", string $method = "", ?array $query = null): string
     {
         if (empty($controllerName) && empty($method)) {
             return 'index.php';
-            
         }
-        $url = 'index.php?controller='.$controllerName.'&method='.$method;
-        if (is_array($query) && count($query)>0) {
-            foreach($query as $key=>$value) {
-                $url = $url.'&'.$key.'='.$value;
+        $url = 'index.php?controller=' . $controllerName . '&method=' . $method;
+        if (is_array($query) && count($query) > 0) {
+            foreach ($query as $key => $value) {
+                $url = $url . '&' . $key . '=' . $value;
             }
         }
         return $url;
@@ -49,8 +48,8 @@ class Dispatcher
     /**
      * Redirige sur la page indiquée
      */
-    public static function redirect($controllerName="", $method="", ?array $query=null)
+    public static function redirect($controllerName = "", $method = "", ?array $query = null)
     {
-        header('location: '.self::generateUrl($controllerName, $method, $query));
+        header('location: ' . self::generateUrl($controllerName, $method, $query));
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace vendor\jdl\App;
+namespace number\gen\App;
 
 use PDO;
-use vendor\jdl\Config\Config;
+use number\gen\Config\Config;
 
 class Model extends PDO
 {
@@ -180,7 +180,7 @@ class Model extends PDO
     }
     // Pour récupérer spécifiquement tous les projets rattachés à un utilisateur (admin ou pas)
     // Argument optionnel pour sélectionner uniquement le projet d'id id_projet
-    public function getProjetsByIdUtilisateur(string $id_utilisateur, string $id_projet="")
+    public function getProjetsByIdUtilisateur(string $id_utilisateur, string $id_projet = "")
     {
         // C'est de la merde, réécrire
         $sql = "SELECT p.id_projet, p.nom_projet, p.id_utilisateur

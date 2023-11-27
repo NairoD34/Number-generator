@@ -1,5 +1,6 @@
 <?php
-use vendor\jdl\App\Dispatcher;
+
+use number\gen\App\Dispatcher;
 
 include_once('vendor/autoload.php');
 

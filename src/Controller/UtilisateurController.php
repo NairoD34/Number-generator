@@ -2,15 +2,15 @@
 
 namespace vendor\jdl\Controller;
 
-use vendor\jdl\App\AbstractController;
-use vendor\jdl\App\Dispatcher;
-use vendor\jdl\App\Security;
-use vendor\jdl\App\Model;
+use number\gen\App\AbstractController;
+use number\gen\App\Dispatcher;
+use number\gen\App\Security;
+use number\gen\App\Model;
 // use vendor\jdl\Entity\Utilisateur;
 // use vendor\jdl\Form\CreationUtilisateurForm;
-use vendor\jdl\App\Verifier;
-use vendor\jdl\Form\UtilisateurForm;
-use vendor\jdl\Controller\ParticipeController;
+use number\gen\App\Verifier;
+use number\gen\Form\UtilisateurForm;
+use number\gen\Controller\ParticipeController;
 
 class UtilisateurController extends AbstractController
 {
@@ -24,12 +24,12 @@ class UtilisateurController extends AbstractController
             'verif' => $_POST['verif'],
         ];
         $errors = [];
-        foreach($datas as $key => $value) {
+        foreach ($datas as $key => $value) {
             if (empty($value)) {
-                $errors[] = 'Votre entrée "'. $key .'" est vide';
+                $errors[] = 'Votre entrée "' . $key . '" est vide';
             }
         }
-        
+
         if (Security::isUserNameInvalid($datas['username']) !== false) {
             $errors[] = 'Vous utilisez des caractères interdits sur votre nom de compte';
         }
@@ -39,7 +39,7 @@ class UtilisateurController extends AbstractController
         if ($datas['password'] !== $datas['verif']) {
             $errors[] = 'Vos mots de passe ne correspondent pas';
         }
-        if (!empty(Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $datas['username']))) {
+        if (!empty(Model::getInstance()->getByAttribute('users', 'username', $datas['username']))) {
             $errors[] = "Nom d'utilisateur déjà utilisé";
         }
         if ($errors != []) {
@@ -67,8 +67,8 @@ class UtilisateurController extends AbstractController
         // Si l'utilisateur a posté une inscription remplie, on la traite.
         if (isset($_POST['submit']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['verif'])) {
             $datas = [
-                'nom_utilisateur' => $_POST['username'],
-                'mdp' => password_hash($_POST['password'], PASSWORD_DEFAULT)
+                'username' => $_POST['username'],
+                'password' => password_hash($_POST['password'], PASSWORD_DEFAULT)
 
             ];
             if ($this->verifRegister()) {
@@ -79,63 +79,15 @@ class UtilisateurController extends AbstractController
         }
         $this->render('registration.php', []);
     }
-    public function displayCreateUtilisateurAndAddToProjet()
-    {
-        // Si on est déjà connectéx, on redirige vers l'accueil
 
-        if (!Security::is_connected() || is_null($_GET['id_projet'])) {
-            Dispatcher::redirect();
-        }
-
-
-        // Si l'utilisateur a posté une inscription remplie, on la traite.
-        if (isset($_POST['submit']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['verif'])) {
-            $datas = [
-                'nom_utilisateur' => $_POST['username'],
-                'mdp' => password_hash($_POST['password'], PASSWORD_DEFAULT)
-
-            ];
-            if ($this->verifRegister()) {
-                $this->createUtilisateur($datas);
-                $user = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']);
-                var_dump($user);
-                $datas2 = [
-                    'id_projet' => $_GET['id_projet'],
-                    'id_utilisateur' => $user[0]->getId_utilisateur(),
-                ];
-                Model::getInstance()->save('participe', $datas2);
-                Dispatcher::redirect('projetController', 'displayProjet', ['id_projet' => $_GET['id_projet']]);
-                // 'Votre compte à bien été créé';
-
-                return true;
-            }
-        }
-        $this->render('registrationadd.php', []);
-    }
 
     // cette function permet de traiter des datas user et des les intégrer à la BDD
     private function createUtilisateur($datas)
     {
-        Model::getInstance()->save('utilisateur', $datas);
+        Model::getInstance()->save('users', $datas);
     }
 
-    private function displayCreateAndAddUtilisateur($datas)
-    {
-        if (isset($_POST['submit']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['verif'])) {
-            $datas = [
-                'nom_utilisateur' => $_POST['username'],
-                'mdp' => password_hash($_POST['password'], PASSWORD_DEFAULT)
 
-            ];
-            if ($this->verifRegister()) {
-                $this->createUtilisateur($datas);
-
-                Dispatcher::redirect('ProjetController', 'displayProjets');
-                // 'Votre compte à bien été créé';
-            }
-        }
-        $this->render('registrationAdd.php', []);
-    }
 
     /**
      * Méthode qui détruit toutes les variables de la session en cours puis redirige sur la page d'accueil.
@@ -165,7 +117,7 @@ class UtilisateurController extends AbstractController
             Dispatcher::redirect();
         }
 
-       
+
         $this->render('connection.php', ["form" => $form, "error" => $error]);
     }
 
@@ -183,12 +135,12 @@ class UtilisateurController extends AbstractController
             return $error;
         }
 
-        $user = Model::getInstance()->getByAttribute('utilisateur', 'nom_utilisateur', $_POST['username']);
-        if (empty($user) || !password_verify($_POST['password'], $user[0]->getMdp())) {
+        $user = Model::getInstance()->getByAttribute('users', 'username', $_POST['username']);
+        if (empty($user) || !password_verify($_POST['password'], $user[0]->getPassword())) {
             return "Identifiants non reconnus";
         }
 
-        $_SESSION['id'] = $user[0]->getId_Utilisateur();
+        $_SESSION['id'] = $user[0]->getId();
         $_SESSION['username'] = $_POST['username'];
         $_SESSION['connected'] = 'connecté';
         return false;

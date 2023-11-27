@@ -1,6 +1,6 @@
 <?php
 
-namespace vendor\jdl\App;
+namespace number\gen\App;
 
 // Vérifie des droits utilisateurs
 
@@ -31,7 +31,7 @@ abstract class Security
     return true;
   }
 
- public static function get_session_user(): object|null
+  public static function get_session_user(): object|null
   {
     if (!self::is_connected()) {
       return null;

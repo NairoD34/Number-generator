@@ -1,8 +1,7 @@
 <?php
 
-use vendor\jdl\Form\UtilisateurForm;
-use vendor\jdl\App\Dispatcher;
+use number\gen\Form\UtilisateurForm;
+use number\gen\App\Dispatcher;
 
 echo "<h1>Enregistrez-vous</h1>";
-echo UtilisateurForm::formSubscribe(Dispatcher::generateUrl("UtilisateurController","displayCreateUtilisateur"));
-
+echo UtilisateurForm::formSubscribe(Dispatcher::generateUrl("UtilisateurController", "displayCreateUtilisateur"));

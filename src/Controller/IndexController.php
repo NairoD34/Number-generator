@@ -1,8 +1,8 @@
 <?php
 
-namespace vendor\jdl\Controller;
+namespace number\gen\Controller;
 
-use vendor\jdl\App\AbstractController;
+use number\gen\App\AbstractController;
 
 class IndexController extends AbstractController
 {
